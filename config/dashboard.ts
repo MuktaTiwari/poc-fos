@@ -40,6 +40,13 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "PERP",
         authorizeOnly: UserRole.USER,
       },
+
+      {
+        href: "/dashboard/serpList",
+        icon: "logo",
+        title: "SERP",
+        authorizeOnly: UserRole.USER,
+      },
     ],
   },
   {
