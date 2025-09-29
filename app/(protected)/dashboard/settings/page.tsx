@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
-
-import { getCurrentUser } from "@/lib/session";
+// import { redirect } from "next/navigation";
+//
+// import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DeleteAccountSection } from "@/components/dashboard/delete-account";
 import { DashboardHeader } from "@/components/dashboard/header";
@@ -13,9 +13,9 @@ export const metadata = constructMetadata({
 });
 
 export default async function SettingsPage() {
-  const user = await getCurrentUser();
-
-  if (!user?.id) redirect("/login");
+  // const user = await getCurrentUser();
+  //
+  // if (!user?.id) redirect("/login");
 
   return (
     <>
@@ -24,8 +24,11 @@ export default async function SettingsPage() {
         text="Manage account and website settings."
       />
       <div className="divide-y divide-muted pb-10">
-        <UserNameForm user={{ id: user.id, name: user.name || "" }} />
-        <UserRoleForm user={{ id: user.id, role: user.role }} />
+        {/* <UserNameForm user={{ id: user.id, name: user.name || "" }} /> */}
+        {/* <UserRoleForm user={{ id: user.id, role: user.role }} /> */}
+        <UserNameForm user={{ id: 12345, name: "Some User" || "" }} />
+        <UserRoleForm user={{ id: 12345, role: "ADMIN" }} />
+
         <DeleteAccountSection />
       </div>
     </>

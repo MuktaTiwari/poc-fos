@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { sidebarLinks } from "@/config/dashboard";
-import { getCurrentUser } from "@/lib/session";
+// import { getCurrentUser } from "@/lib/session";
 import { SearchCommand } from "@/components/dashboard/search-command";
 import {
   DashboardSidebar,
@@ -16,16 +16,18 @@ interface ProtectedLayoutProps {
 }
 
 export default async function Dashboard({ children }: ProtectedLayoutProps) {
-  const user = await getCurrentUser();
+  // const user = await getCurrentUser();
+  //
+  // if (!user) redirect("/login");
 
-  if (!user) redirect("/login");
+  // const filteredLinks = sidebarLinks.map((section) => ({
+  //   ...section,
+  //   items: section.items.filter(
+  //     ({ authorizeOnly }) => !authorizeOnly || authorizeOnly === user.role,
+  //   ),
+  // }));
 
-  const filteredLinks = sidebarLinks.map((section) => ({
-    ...section,
-    items: section.items.filter(
-      ({ authorizeOnly }) => !authorizeOnly || authorizeOnly === user.role,
-    ),
-  }));
+  const filteredLinks = sidebarLinks;
 
   return (
     <div className="relative flex min-h-screen w-full">

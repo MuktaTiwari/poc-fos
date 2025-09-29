@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/session";
+// import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
@@ -10,13 +10,13 @@ export const metadata = constructMetadata({
 });
 
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
+  // const user = await getCurrentUser();
 
   return (
     <>
       <DashboardHeader
         heading="Dashboard"
-        text={`Current Role : ${user?.role} — Change your role in settings.`}
+        text={`Current Role : USER ROLE — Change your role in settings.`}
       />
       <EmptyPlaceholder>
         <EmptyPlaceholder.Icon name="post" />
