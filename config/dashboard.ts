@@ -4,8 +4,14 @@ import { SidebarNavItem } from "types";
 
 export const sidebarLinks: SidebarNavItem[] = [
   {
-    title: "MENU",
+    title: "PLATFORM",
     items: [
+      {
+        href: "/perp",
+        icon: "laptop",
+        title: "View PERP",
+        authorizeOnly: UserRole.ADMIN,
+      },
       {
         href: "/admin",
         icon: "laptop",
@@ -27,6 +33,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "User Posts",
         authorizeOnly: UserRole.USER,
         disabled: true,
+      },
+      {
+        href: "/dashboard/perp",
+        icon: "logo",
+        title: "PERP",
+        authorizeOnly: UserRole.USER,
       },
     ],
   },

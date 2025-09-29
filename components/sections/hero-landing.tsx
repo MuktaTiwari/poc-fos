@@ -10,20 +10,20 @@ export default async function HeroLanding() {
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
         <Link
-          href="https://next-saas-stripe-starter.vercel.app/"
+          href="https://pinnacle.in/"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm", rounded: "xl" }),
             "px-4",
           )}
           target="_blank"
         >
-          <span className="mr-3">🎉</span> Free Next SaaS Starter Here!
+          <span className="mr-3">🎉</span> Be a part of Pinnacle family now!
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          Next.js Template with{" "}
+          All Communication at{" "}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Auth & User Roles!
+            Single Place!
           </span>
         </h1>
 
@@ -34,14 +34,14 @@ export default async function HeroLanding() {
 
         <div className="flex justify-center space-x-2">
           <Link
-href="/login"
+            href="/login"
             prefetch={true}
             className={cn(
               buttonVariants({ rounded: "xl", size: "lg" }),
               "gap-2 px-5 text-[15px]",
             )}
           >
-<span>Go to Login Page</span>
+            <span>Go to Login Page</span>
             <Icons.arrowRight className="size-4" />
           </Link>
           <Link

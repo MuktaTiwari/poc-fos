@@ -24,7 +24,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
   const { data: session, status } = useSession();
   const { setShowSignInModal } = useContext(ModalContext);
-const links = marketingConfig.mainNav;
+  const links = marketingConfig.mainNav;
   const selectedLayout = useSelectedLayoutSegment();
 
   return (
@@ -33,9 +33,7 @@ const links = marketingConfig.mainNav;
         scroll ? (scrolled ? "border-b" : "bg-transparent") : "border-b"
       }`}
     >
-      <MaxWidthWrapper
-        className="flex h-14 items-center justify-between py-4"
-      >
+      <MaxWidthWrapper className="flex h-14 items-center justify-between py-4">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-1.5">
             <Icons.logo />
@@ -87,7 +85,8 @@ const links = marketingConfig.mainNav;
               variant="default"
               size="sm"
               rounded="lg"
-              onClick={() => setShowSignInModal(true)}
+              // onClick={() => setShowSignInModal(true)}
+              onClick={() => (window.location.href = "/dashboard")}
             >
               <span>Sign In</span>
               <Icons.arrowRight className="size-4" />
