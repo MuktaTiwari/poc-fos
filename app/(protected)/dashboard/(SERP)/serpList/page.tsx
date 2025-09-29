@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import SerpPopup, { FormData } from "../serpAdd/page";
+import { FormData } from "../serpAdd/page"; // Type import
 
 interface SerpData {
   id: number;
@@ -19,7 +20,7 @@ export default function SerpList() {
     { id: 3, keyword: "ShadCN UI", rank: 3, url: "https://ui.shadcn.com" },
   ]);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const router = useRouter();
 
   const columns: ColumnDef<SerpData>[] = [
     { accessorKey: "id", header: "ID" },
@@ -28,20 +29,12 @@ export default function SerpList() {
     { accessorKey: "url", header: "URL" },
   ];
 
-  const handleSave = (formData: FormData) => {
-    const newSerp: SerpData = {
-      id: data.length + 1,
-      ...formData,
-    };
-    setData([...data, newSerp]);
-  };
-
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">SERP</h1>
         <button
-          onClick={() => setIsPopupOpen(true)}
+          onClick={() => router.push("/dashboard/serpAdd")}
           className="px-4 py-2 bg-black text-white rounded hover:bg-gray-600"
         >
           Add SERP
@@ -49,12 +42,6 @@ export default function SerpList() {
       </div>
 
       <DataTable columns={columns} data={data} />
-
-      <SerpPopup
-        isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        onSave={handleSave}
-      />
     </div>
   );
 }
