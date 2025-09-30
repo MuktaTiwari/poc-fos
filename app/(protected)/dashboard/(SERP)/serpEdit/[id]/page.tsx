@@ -20,10 +20,10 @@ export default function SerpEditPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get<SERPFormData>(
-          `http://localhost:3001/serp/${id}`
+        const res = await axios.get(
+          `http://172.1.0.9:3000/business/${id}`
         );
-        setFormData(res.data);
+        setFormData(res.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -41,17 +41,24 @@ export default function SerpEditPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData) return;
+  e.preventDefault();
+  if (!formData) return;
 
-    try {
-      await axios.put(`http://localhost:3001/serp/${id}`, formData);
-      console.log("Updated Data:", formData);
-      router.push("/dashboard/serpList");
-    } catch (error) {
-      console.error("Error updating the data:", error);
-    }
-  };
+  try {
+    // Only send editable fields
+    const payload = {
+      name: formData.name,
+      type: formData.type,
+      isActive: formData.isActive,
+    };
+
+    await axios.patch(`http://172.1.0.9:3000/business/${id}`, payload);
+    router.push("/dashboard/serpList");
+  } catch (error: any) {
+    console.error("Error updating the data:", error.response?.data || error.message);
+  }
+};
+
 
   const handleCancel = () => {
     router.push("/dashboard/serpList");

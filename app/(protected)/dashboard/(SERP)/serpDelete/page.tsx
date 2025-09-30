@@ -54,7 +54,6 @@ export default function SerpDeletePage() {
     setIsLoading(true);
     try {
       await axios.delete(`http://172.1.0.9:3000/business/${id}`);
-      console.log("SERP item deleted successfully");
       router.push("/dashboard/serpList");
     } catch (error) {
       console.error("Error deleting SERP item:", error);
