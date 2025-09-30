@@ -3,112 +3,106 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export interface FormData {
-  keyword: string;
-  rank: number;
-  url: string;
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export interface SERPFormData {
+  name: string;
+  type: number;
+  isActive: string;
 }
 
 export default function SerpAddPage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<FormData>({
-    keyword: "",
-    rank: 0,
-    url: "",
+  const [formData, setFormData] = useState<SERPFormData>({
+    name: "",
+    type: 0,
+    isActive: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "rank" ? Number(value) : value,
+      [name]: name === "type" ? Number(value) : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     console.log("Saved Data:", formData);
-    router.push("/dashboard/serpList"); // Redirect after save
+    router.push("/dashboard/serpList");
   };
 
   const handleCancel = () => {
-    router.push("/dashboard/serpList"); // Redirect on cancel
+    router.push("/dashboard/serpList");
   };
 
   return (
-    <main className="min-h-screen bg-white p-10">
-      <div className="max-w-4xl mx-auto rounded-lg shadow-lg p-10 bg-white">
-        <h1 className="text-3xl font-bold mb-6">Add New SERP</h1>
+    <main className="min-h-screen bg-background p-10 text-foreground transition-colors duration-300">
+      <div className="mx-auto max-w-4xl rounded-lg bg-card p-10 text-card-foreground shadow-lg transition-colors duration-300">
+        <h1 className="mb-6 text-2xl font-semibold">Add New SERP</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Keyword */}
           <div className="flex flex-col">
-            <label htmlFor="keyword" className="text-lg font-medium text-gray-700 mb-2">
-              Keyword
-            </label>
-            <input
+            <Label htmlFor="name">Keyword</Label>
+            <Input
               type="text"
-              id="keyword"
-              name="keyword"
-              value={formData.keyword}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter keyword"
               required
-              className="border border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Rank */}
           <div className="flex flex-col">
-            <label htmlFor="rank" className="text-lg font-medium text-gray-700 mb-2">
-              Rank
-            </label>
-            <input
+            <Label htmlFor="type">Rank</Label>
+            <Input
               type="number"
-              id="rank"
-              name="rank"
-              value={formData.rank}
+              id="type"
+              name="type"
+              value={formData.type}
               onChange={handleInputChange}
               placeholder="Enter rank"
               required
-              className="border border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* URL */}
           <div className="flex flex-col">
-            <label htmlFor="url" className="text-lg font-medium text-gray-700 mb-2">
-              URL
-            </label>
-            <input
+            <Label htmlFor="isActive">URL</Label>
+            <Input
               type="url"
-              id="url"
-              name="url"
-              value={formData.url}
+              id="isActive"
+              name="isActive"
+              value={formData.isActive}
               onChange={handleInputChange}
               placeholder="Enter URL"
               required
-              className="border border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4">
-            <button
+          <div className="mt-6 flex justify-end gap-4">
+            <Button
               type="submit"
-              className="bg-black text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-800"
+              className="bg-primary text-primary-foreground"
             >
               Save
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              className="rounded-md bg-muted px-6 py-3 font-medium text-muted-foreground transition-colors duration-300 hover:bg-muted/90"
               onClick={handleCancel}
-              className="bg-gray-500 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-600"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       </div>
