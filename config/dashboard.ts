@@ -13,6 +13,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
+        href: "/registry-list",
+        icon: "album",
+        title: "Registry",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
         href: "/admin",
         icon: "laptop",
         title: "Admin Panel",
