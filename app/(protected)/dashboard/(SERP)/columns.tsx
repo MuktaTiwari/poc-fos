@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
 export interface SerpData {
-  id:number;
+  id: number;
   name: string;
   type: string;
   isActive: boolean;
@@ -21,7 +21,6 @@ export interface SerpData {
 export const getColumns = (
   handleEdit: (row: SerpData) => void,
   handleDelete: (row: SerpData) => void,
-  handleView: (row: SerpData) => void
 ): ColumnDef<SerpData>[] => [
   {
     accessorKey: "id",
@@ -37,7 +36,21 @@ export const getColumns = (
   },
   {
     accessorKey: "isActive",
-    header: "IsActive",
+    header: "Status",
+    cell: ({ row }) => {
+      const isActive = row.getValue("isActive") as boolean;
+      return (
+        <span
+          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+            isActive
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {isActive ? "Active" : "Inactive"}
+        </span>
+      );
+    },
   },
   {
     id: "actions",
@@ -60,9 +73,6 @@ export const getColumns = (
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDelete(item)}>
               Delete
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleView(item)}>
-              View
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

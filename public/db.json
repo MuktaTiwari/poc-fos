@@ -1,26 +1,14 @@
 {
   "serp": [
     {
-      "id": "1",
-      "name": "SERP Item 1",
-      "type": "type1",
-      "isActive": true
-    },
-    {
-      "id": "2",
-      "name": "SERP Item 2",
-      "type": "type1",
-      "isActive": false
-    },
-    {
       "id": "3",
       "name": "SERP Item 3",
-      "type": "type1",
+      "type": "type1111111111",
       "isActive": false
     },
     {
       "id": "4",
-      "name": "SERP Item 4",
+      "name": "SERP Item 21",
       "type": "type1",
       "isActive": false
     },
@@ -31,10 +19,10 @@
       "isActive": false
     },
     {
-      "id": "1b81",
-      "name": "Manimukta Tiwari",
-      "type": "registry",
-      "isActive": false
+      "id": "8119",
+      "name": "Aryan Chaple",
+      "type": "SERP1",
+      "isActive": true
     }
   ]
 }

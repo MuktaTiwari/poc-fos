@@ -19,7 +19,7 @@ export default function SerpAddPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<SERPFormData>({
-    id: 0, // will be assigned by JSON Server
+    id: 0,
     name: "",
     type: "",
     isActive: true,
@@ -34,10 +34,9 @@ export default function SerpAddPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // ✅ stop reload first
+    e.preventDefault();
 
     try {
-      // ✅ post the new record to json-server
       await axios.post("http://localhost:3001/serp", {
         name: formData.name,
         type: formData.type,
@@ -56,28 +55,33 @@ export default function SerpAddPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background p-10 text-foreground transition-colors duration-300">
-      <div className="mx-auto max-w-4xl rounded-lg bg-card p-10 text-card-foreground shadow-lg transition-colors duration-300">
-        <h1 className="mb-6 text-2xl font-semibold">Add New SERP</h1>
+    <main className="min-h-screen bg-background p-6 text-foreground">
+      <div className="mx-auto max-w-2xl rounded-lg bg-card p-8 shadow-lg">
+        <h1 className="mb-8 text-3xl font-bold text-center">Add New SERP</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name */}
-          <div className="flex flex-col">
-            <Label htmlFor="name">Name</Label>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Name Field */}
+          <div className="space-y-3">
+            <Label htmlFor="name" className="text-base font-medium">
+              Name
+            </Label>
             <Input
               type="text"
               id="name"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter keyword"
+              placeholder="Enter name"
+              className="h-12 text-base"
               required
             />
           </div>
 
-          {/* Type */}
-          <div className="flex flex-col">
-            <Label htmlFor="type">Type</Label>
+          {/* Type Field */}
+          <div className="space-y-3">
+            <Label htmlFor="type" className="text-base font-medium">
+              Type
+            </Label>
             <Input
               type="text"
               id="type"
@@ -85,36 +89,46 @@ export default function SerpAddPage() {
               value={formData.type}
               onChange={handleInputChange}
               placeholder="Enter type"
+              className="h-12 text-base"
               required
             />
           </div>
 
-          {/* Active / Inactive */}
-          <div className="flex items-center gap-2">
-            <Input
-              type="checkbox"
-              id="isActive"
-              name="isActive"
-              checked={formData.isActive}
-              onChange={handleInputChange}
-            />
-            <Label htmlFor="isActive">Active</Label>
+          {/* Active Checkbox - Custom Styled */}
+          <div className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/20">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isActive"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleInputChange}
+                className="h-5 w-5 rounded border-2 border-gray-300 bg-background text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              />
+            </div>
+            <Label
+              htmlFor="isActive"
+              className="text-base font-medium cursor-pointer"
+            >
+              Active
+            </Label>
           </div>
 
           {/* Buttons */}
-          <div className="mt-6 flex justify-end gap-4">
-            <Button
-              type="submit"
-              className="bg-primary text-primary-foreground"
-            >
-              Save
-            </Button>
+          <div className="flex justify-end gap-4 pt-6">
             <Button
               type="button"
-              className="rounded-md bg-muted px-6 py-3 font-medium text-muted-foreground hover:bg-muted/90"
+              variant="outline"
               onClick={handleCancel}
+              className="h-11 px-6 text-base font-medium"
             >
               Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="h-11 px-6 text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Save
             </Button>
           </div>
         </form>
