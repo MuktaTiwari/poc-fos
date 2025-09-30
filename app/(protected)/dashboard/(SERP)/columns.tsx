@@ -11,8 +11,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
 export interface SerpData {
+  id:number;
   name: string;
-  type: number;
+  type: string;
   isActive: boolean;
 }
 
@@ -22,6 +23,10 @@ export const getColumns = (
   handleDelete: (row: SerpData) => void,
   handleView: (row: SerpData) => void
 ): ColumnDef<SerpData>[] => [
+  {
+    accessorKey: "id",
+    header: "Id",
+  },
   {
     accessorKey: "name",
     header: "Name",

@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
 
 export interface SERPFormData {
+  id:number;
   name: string;
-  type: number;
+  type: string;
   isActive: string;
 }
 
@@ -17,8 +19,9 @@ export default function SerpAddPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<SERPFormData>({
+    id:0,
     name: "",
-    type: 0,
+    type: "",
     isActive: "",
   });
 
@@ -30,10 +33,18 @@ export default function SerpAddPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saved Data:", formData);
-    router.push("/dashboard/serpList");
+  const handleSubmit = async (e: React.FormEvent) => {
+
+    try{
+
+      const saveSerp = await axios.post("http://localhost:3001/serp");
+      e.preventDefault();
+      console.log("Saved Data:", formData);
+      router.push("/dashboard/serpList");
+    }
+    catch(error){
+      console.log("error saving the data")
+    }
   };
 
   const handleCancel = () => {
@@ -45,10 +56,11 @@ export default function SerpAddPage() {
       <div className="mx-auto max-w-4xl rounded-lg bg-card p-10 text-card-foreground shadow-lg transition-colors duration-300">
         <h1 className="mb-6 text-2xl font-semibold">Add New SERP</h1>
 
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Keyword */}
           <div className="flex flex-col">
-            <Label htmlFor="name">Keyword</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
               type="text"
               id="name"
@@ -62,9 +74,9 @@ export default function SerpAddPage() {
 
           {/* Rank */}
           <div className="flex flex-col">
-            <Label htmlFor="type">Rank</Label>
+            <Label htmlFor="type">Type</Label>
             <Input
-              type="number"
+              type="text"
               id="type"
               name="type"
               value={formData.type}
@@ -76,7 +88,7 @@ export default function SerpAddPage() {
 
           {/* URL */}
           <div className="flex flex-col">
-            <Label htmlFor="isActive">URL</Label>
+            <Label htmlFor="isActive">IsActive</Label>
             <Input
               type="url"
               id="isActive"

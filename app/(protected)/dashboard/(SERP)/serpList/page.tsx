@@ -1,39 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // ✅ correct import
+import axios from "axios";
 
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import { getColumns, SerpData } from "../columns";
 import SerpAddPage, { SERPFormData } from "../serpAdd/page";
-import { Button } from "@/components/ui/button";
 
 export default function SerpList() {
-  const [data, setData] = useState<SerpData[]>([
-    { name: "ReactJS", type: 1, isActive: true },
-    { name: "Next.js", type: 2, isActive: true },
-    { name: "ShadCN UI", type: 3, isActive: true },
-  ]);
-
+  const [data, setData] = useState<SerpData[]>([]);
   const router = useRouter(); // ✅ works in client component
-
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const handleEdit = (row: SerpData) => console.log("Edit:", row);
+  useEffect(() => {
+    const fetchSerp = async () => {
+      try {
+        const serpData = await axios.get<SerpData[]>(
+          "http://localhost:3001/serp",
+        );
+        setData(serpData.data);
+      } catch (error) {
+        console.log("error fetching the serp from the db.json");
+      }
+    };
+
+    fetchSerp();
+  }, []);
+
+  const handleEdit = (row: SerpData) => {
+    // assuming your edit page is /dashboard/serpEdit/[name] or [id]
+    router.push(`/dashboard/serpEdit/${encodeURIComponent(row.name)}`);
+  };
   const handleDelete = (row: SerpData) => console.log("Delete:", row);
   const handleView = (row: SerpData) => console.log("View:", row);
 
-  const handleSubmit = (formData: SERPFormData) => {
-    const newRow: SerpData = {
-      name: formData.name,
-      type: formData.type,
-      isActive: true,
-    };
-    setData((prev) => [...prev, newRow]);
-    setShowAddForm(false);
-  };
 
   const columns = getColumns(handleEdit, handleDelete, handleView);
 
