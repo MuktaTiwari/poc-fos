@@ -1,12 +1,6 @@
 {
   "serp": [
     {
-      "id": "3",
-      "name": "SERP Item 3",
-      "type": "type1111111111",
-      "isActive": false
-    },
-    {
       "id": "4",
       "name": "SERP Item 21",
       "type": "type1",
