@@ -40,6 +40,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "PERP",
         authorizeOnly: UserRole.USER,
       },
+      {
+        href: "/dashboard/org",
+        icon: "logo",
+        title: "ORG",
+        authorizeOnly: UserRole.USER,
+      },
     ],
   },
   {
