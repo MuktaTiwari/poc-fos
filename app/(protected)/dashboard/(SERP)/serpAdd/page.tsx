@@ -37,10 +37,11 @@ export default function SerpAddPage() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3001/serp", {
+      await axios.post("http://172.1.0.9:3000/business", {
         name: formData.name,
         type: formData.type,
         isActive: formData.isActive,
+        parentId: "cmg6bjj1b0001kck9zxu0g7p6"
       });
 
       console.log("Saved Data:", formData);

@@ -21,7 +21,7 @@ export default function SerpList() {
   const fetchSerp = async () => {
     try {
       const serpData = await axios.get<SerpData[]>(
-        "http://localhost:3001/serp",
+        "http://172.1.0.9:3000/business",
       );
       setData(serpData.data);
     } catch (error) {
