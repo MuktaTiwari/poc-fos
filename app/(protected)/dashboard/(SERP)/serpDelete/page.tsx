@@ -40,10 +40,9 @@ export default function SerpDeletePage() {
 
   const fetchItemDetails = async () => {
     try {
-      const response = await axios.get<SerpData>(
-        `http://localhost:3001/serp/${id}`
-      );
-      setItem(response.data);
+      const response = await axios.get(`http://172.1.0.9:3000/business/${id}`);
+      // Based on your SerpList component, the data might be nested in a data property
+      setItem(response.data.data || response.data);
     } catch (error) {
       console.error("Error fetching item details:", error);
     }
@@ -54,7 +53,7 @@ export default function SerpDeletePage() {
 
     setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:3001/serp/${id}`);
+      await axios.delete(`http://172.1.0.9:3000/business/${id}`);
       console.log("SERP item deleted successfully");
       router.push("/dashboard/serpList");
     } catch (error) {
@@ -71,7 +70,9 @@ export default function SerpDeletePage() {
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete "{item?.name}"?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Delete "{item?.name || `Item ${id}`}"?
+          </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone.
           </AlertDialogDescription>
