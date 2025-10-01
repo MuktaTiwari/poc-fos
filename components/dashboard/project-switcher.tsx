@@ -17,21 +17,30 @@ type ProjectType = {
   title: string;
   slug: string;
   color: string;
+  type: string;
 };
 
 const projects: ProjectType[] = [
   {
-    title: "Project 1",
-    slug: "project-number-one",
-    color: "bg-red-500",
+    title: "HDFC Bank Ltd",
+    slug: "hdfc-bank-ltd",
+    color: "bg-blue-600",
+    type: "SERP",
   },
   {
-    title: "Project 2",
-    slug: "project-number-two",
-    color: "bg-blue-500",
+    title: "Patanjali Ayurveda Pvt Ltd",
+    slug: "patanjali-ayurveda",
+    color: "bg-green-600",
+    type: "ORG",
+  },
+  {
+    title: "Reliance Retail Ltd",
+    slug: "reliance-retail",
+    color: "bg-purple-600",
+    type: "ORG",
   },
 ];
-const selected: ProjectType = projects[1];
+const selected: ProjectType = projects[0];
 
 export default function ProjectSwitcher({
   large = false,
@@ -61,14 +70,17 @@ export default function ProjectSwitcher({
                   selected.color,
                 )}
               />
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-col items-start">
+                <span className="text-xs text-muted-foreground">
+                  ({selected.type})
+                </span>
                 <span
                   className={cn(
-                    "inline-block truncate text-sm font-medium xl:max-w-[120px]",
-                    large ? "w-full" : "max-w-[80px]",
+                    "inline-block truncate text-sm font-medium",
+                    large ? "max-w-full" : "max-w-[140px] xl:max-w-[160px]",
                   )}
                 >
-                  {selected.slug}
+                  {selected.title}
                 </span>
               </div>
             </div>
@@ -101,26 +113,29 @@ function ProjectList({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      {projects.map(({ slug, color }) => (
+      {projects.map(({ slug, color, title, type }) => (
         <Link
           key={slug}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "relative flex h-9 items-center gap-3 p-3 text-muted-foreground hover:text-foreground",
+            "relative flex min-h-[44px] items-center gap-3 p-3 text-muted-foreground hover:text-foreground",
           )}
           href="#"
           onClick={() => setOpenPopover(false)}
         >
           <div className={cn("size-3 shrink-0 rounded-full", color)} />
-          <span
-            className={`flex-1 truncate text-sm ${
-              selected.slug === slug
-                ? "font-medium text-foreground"
-                : "font-normal"
-            }`}
-          >
-            {slug}
-          </span>
+          <div className="flex flex-1 flex-col items-start">
+            <span className="text-xs text-muted-foreground">({type})</span>
+            <span
+              className={`truncate text-sm ${
+                selected.slug === slug
+                  ? "font-medium text-foreground"
+                  : "font-normal"
+              }`}
+            >
+              {title}
+            </span>
+          </div>
           {selected.slug === slug && (
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-foreground">
               <Check size={18} aria-hidden="true" />
@@ -128,16 +143,6 @@ function ProjectList({
           )}
         </Link>
       ))}
-      <Button
-        variant="outline"
-        className="relative flex h-9 items-center justify-center gap-2 p-2"
-        onClick={() => {
-          setOpenPopover(false);
-        }}
-      >
-        <Plus size={18} className="absolute left-2.5 top-2" />
-        <span className="flex-1 truncate text-center">New Project</span>
-      </Button>
     </div>
   );
 }
