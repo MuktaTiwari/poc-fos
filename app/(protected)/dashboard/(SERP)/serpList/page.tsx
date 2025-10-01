@@ -20,7 +20,7 @@ export default function SerpList() {
 
   const fetchSerp = async () => {
     try {
-      const serpData = await axios.get("http://172.1.0.9:3000/business");
+      const serpData = await axios.get("http://localhost:3000/business");
       setData(serpData.data.data);
     } catch (error) {
       console.log("error fetching the serp from the db.json");
@@ -50,7 +50,7 @@ export default function SerpList() {
           onClick={() => router.push("/dashboard/serpAdd")}
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors duration-300 hover:bg-primary/90"
         >
-          Add SERP
+          Add REGISTRY
         </Button>
       </div>
 

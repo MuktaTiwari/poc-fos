@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 export interface SerpData {
   id: number;
@@ -40,7 +40,7 @@ export default function SerpDeletePage() {
 
   const fetchItemDetails = async () => {
     try {
-      const response = await axios.get(`http://172.1.0.9:3000/business/${id}`);
+      const response = await axios.get(`http://localhost:3000/business/${id}`);
       // Based on your SerpList component, the data might be nested in a data property
       setItem(response.data.data || response.data);
     } catch (error) {
@@ -53,7 +53,7 @@ export default function SerpDeletePage() {
 
     setIsLoading(true);
     try {
-      await axios.delete(`http://172.1.0.9:3000/business/${id}`);
+      await axios.delete(`http://localhost:3000/business/${id}`);
       router.push("/dashboard/serpList");
     } catch (error) {
       console.error("Error deleting SERP item:", error);
@@ -73,21 +73,16 @@ export default function SerpDeletePage() {
             Delete "{item?.name || `Item ${id}`}"?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone.
+            This action cannot be undone. If you delete this SERP, all its child
+            records will also be deleted.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        
+
         <AlertDialogFooter>
-          <AlertDialogCancel 
-            onClick={handleCancel}
-            disabled={isLoading}
-          >
+          <AlertDialogCancel onClick={handleCancel} disabled={isLoading}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDelete}
-            disabled={isLoading}
-          >
+          <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
