@@ -75,10 +75,10 @@ export function DataTable<TData, TValue>({
     <div className="w-full">
       <div className="flex items-center justify-between">
         <DashboardHeader
-          heading="Organization List"
+          heading="Registry List"
           text="Manage your registries."
         />
-        <Button className="px-6 py-2" onClick={() => router.push("/registry-create")}>Add</Button>
+        <Button className="px-6 py-2" onClick={() => router.push("/registry-create")}>Add Registry</Button>
       </div>
       <div className="flex items-center py-4">
         <Input

@@ -8,8 +8,9 @@ import { DashboardHeader } from "@/components/dashboard/header"
 import RegistryCreateForm from "@/components/forms/registry-create-form"
 
 // We can use the same Registry type from the column definition
-import { Registry } from "@/app/(registry)/registry-list/column"
+import { Registry } from "@/app/(registry)/registry/column"
 import { useRouter } from "next/navigation"
+import { env } from "@/env.mjs"
 
 export default function EditRegistryPage() {
   const params = useParams()
@@ -25,7 +26,7 @@ export default function EditRegistryPage() {
         try {
           setLoading(true)
           const response = await axios.get(
-            `http://172.1.0.9:3000/business/${id}`
+            `${env.NEXT_PUBLIC_APP_URL}/business/${id}`
           )
           setRegistry(response.data.data)
           setError(null)
@@ -44,8 +45,8 @@ export default function EditRegistryPage() {
   return (
     <div>
       <DashboardHeader
-        heading="Edit Organization"
-        text="Edit the details of your organization."
+        heading="Edit Registry"
+        text="Edit the details of your Registry."
       />
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}

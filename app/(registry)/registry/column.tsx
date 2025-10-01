@@ -82,25 +82,24 @@ export const getColumns = (
       header: "Type",
       cell: ({ row }) => <div className="capitalize">{row.getValue("type")}</div>,
     },
-      {
-        accessorKey: "isActive",
-        header: "Status",
-        cell: ({ row }) => {
-          const isActive = row.getValue("isActive")
+    {
+      accessorKey: "isActive",
+      header: "Status",
+      cell: ({ row }) => {
+        const isActive = row.getValue("isActive")
 
-          return (
-            <div
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-                isActive
-                  ? "border-transparent bg-green-100 text-green-800 dark:bg-green-800/80 dark:text-green-50"
-                  : "border-transparent bg-red-100 text-red-800 dark:bg-red-800/80 dark:text-red-50"
+        return (
+          <div
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${isActive
+                ? "border-transparent bg-green-100 text-green-800 dark:bg-green-800/80 dark:text-green-50"
+                : "border-transparent bg-red-100 text-red-800 dark:bg-red-800/80 dark:text-red-50"
               }`}
-            >
-              {isActive ? "Active" : "Inactive"}
-            </div>
-          )
-        },
-      },    {
+          >
+            {isActive ? "Active" : "Inactive"}
+          </div>
+        )
+      },
+    }, {
       accessorKey: "createdAt",
       header: () => <div className="text-right">Created At</div>,
       cell: ({ row }) => {
@@ -144,8 +143,7 @@ export const getColumns = (
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete this
-                  payment and remove your data from our servers.
+                  Are you sure you want to delete this registry? This will delete all child items contained within it.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
