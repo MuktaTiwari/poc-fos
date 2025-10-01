@@ -18,7 +18,7 @@ import {
 
 import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
 
-export type Organization = {
+export type data = {
   id: string;
   name: string;
   code?: string; // Made optional
@@ -35,7 +35,7 @@ export type Organization = {
   updatedAt: Date;
 };
 
-export const columns: ColumnDef<Organization>[] = [
+export const columns: ColumnDef<data>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -97,20 +97,28 @@ export const columns: ColumnDef<Organization>[] = [
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
-          <DropdownMenuItem className="dark:hover:bg-gray-700 dark:hover:text-white">
+          <DropdownMenuItem className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white">
+            <EditIcon className="h-4 w-4 text-blue-500" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem
+            asChild
+            className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
             <DeleteOrganizationDialog
-              onConfirm={() =>
-                alert(`Deleted organization: ${row.original.name}`)
-              }
+              organizationId={row.original.id}
+              onSuccess={() => {
+                /* This will be replaced by a function from demo.tsx */
+              }}
             >
-              <button className="w-full text-left">Delete</button>
+              <button className="flex w-full items-center gap-2 text-left">
+                <Trash2Icon className="h-4 w-4 text-red-500" />
+                Delete
+              </button>
             </DeleteOrganizationDialog>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
-  },
+  }
 ];

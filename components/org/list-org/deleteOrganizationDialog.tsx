@@ -12,13 +12,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import axios from "axios";
+import { toast } from "sonner";
+
 export function DeleteOrganizationDialog({
   children,
-  onConfirm,
+  organizationId,
+  onSuccess,
 }: {
   children: React.ReactNode;
-  onConfirm: () => void;
+  organizationId: string;
+  onSuccess: () => void;
 }) {
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/business/${organizationId}`);
+      toast.success("Organization deleted successfully.");
+      onSuccess();
+    } catch (error) {
+      toast.error("Failed to delete organization.");
+      console.error("Error deleting organization:", error);
+    }
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -36,7 +51,7 @@ export function DeleteOrganizationDialog({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-red-600 text-white hover:bg-red-700"
-            onClick={onConfirm}
+            onClick={handleDelete}
           >
             Delete
           </AlertDialogAction>
