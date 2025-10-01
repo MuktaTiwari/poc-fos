@@ -25,7 +25,7 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/org",
+        href: "/dashboard/org",
         icon: "squareStack",
         title: "ORG",
         authorizeOnly: UserRole.ADMIN,
@@ -71,12 +71,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "E-mail",
         authorizeOnly: UserRole.ADMIN,
       },
-      {
-        href: "/dashboard/org",
-        icon: "logo",
-        title: "ORG",
-        authorizeOnly: UserRole.USER,
-      },
+      // {
+      //   href: "/dashboard/org",
+      //   icon: "logo",
+      //   title: "ORG",
+      //   authorizeOnly: UserRole.USER,
+      // },
     ],
   },
   {
