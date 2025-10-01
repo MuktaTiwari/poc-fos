@@ -10,7 +10,8 @@ export default function ListOrganization() {
   return (
     <div className="container mx-auto py-10">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-4xl font-semibold">Organization </h1> 
+        <h1 className="text-4xl font-semibold dark:text-gray-100">Organization </h1>
+        
       </div>
       <Demo />
     </div>

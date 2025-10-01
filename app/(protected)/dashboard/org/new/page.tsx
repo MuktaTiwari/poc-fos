@@ -1,10 +1,13 @@
-import NewOrg from "@/components/org/new-org/page";
+import NewOrg from "@/components/org/create-org/page";
 
-export default function CreateOrg() {
-    return (
-      <div className="p-6">
-        <NewOrg />
-      </div>
-    );
-  }
-  
+
+
+
+export default function OrgPage() {
+  return (
+    <div>
+     
+      <NewOrg />
+    </div>
+  );
+}

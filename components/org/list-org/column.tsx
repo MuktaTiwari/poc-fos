@@ -15,9 +15,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
 
-export type Organization = {
+export type data = {
   id: string;
   name: string;
   code?: string; // Made optional
@@ -34,7 +35,7 @@ export type Organization = {
   updatedAt: Date;
 };
 
-export const columns: ColumnDef<Organization>[] = [
+export const columns: ColumnDef<data>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,7 +43,7 @@ export const columns: ColumnDef<Organization>[] = [
         type="checkbox"
         checked={table.getIsAllRowsSelected()}
         onChange={table.getToggleAllRowsSelectedHandler()}
-        className="size-4 rounded border-gray-300"
+        className="size-4 rounded border-gray-300 dark:border-gray-700"
       />
     ),
     cell: ({ row }) => (
@@ -50,7 +51,7 @@ export const columns: ColumnDef<Organization>[] = [
         type="checkbox"
         checked={row.getIsSelected()}
         onChange={row.getToggleSelectedHandler()}
-        className="size-4 rounded border-gray-300"
+        className="size-4 rounded border-gray-300 dark:border-gray-700"
       />
     ),
   },
@@ -71,8 +72,8 @@ export const columns: ColumnDef<Organization>[] = [
       <span
         className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium ${
           row.getValue("isActive") === "active"
-            ? "bg-green-100 text-green-800"
-            : "bg-red-100 text-red-800"
+            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-white"
+            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-white"
         }`}
       >
         {row.getValue("isActive")}
@@ -90,24 +91,34 @@ export const columns: ColumnDef<Organization>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex items-center justify-center rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
+          <button className="flex items-center justify-center rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">
             <MoreHorizontal className="h-5 w-5" />
             <span className="sr-only">Open menu</span>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-48">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem asChild>
+        <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
+          <DropdownMenuItem className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white">
+            <EditIcon className="h-4 w-4 text-blue-500" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            asChild
+            className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
             <DeleteOrganizationDialog
-              onConfirm={() =>
-                alert(`Deleted organization: ${row.original.name}`)
-              }
+              organizationId={row.original.id}
+              onSuccess={() => {
+                /* This will be replaced by a function from demo.tsx */
+              }}
             >
-              <button className="w-full text-left">Delete</button>
+              <button className="flex w-full items-center gap-2 text-left">
+                <Trash2Icon className="h-4 w-4 text-red-500" />
+                Delete
+              </button>
             </DeleteOrganizationDialog>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
-  },
+  }
 ];
