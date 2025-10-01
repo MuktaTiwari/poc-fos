@@ -13,13 +13,13 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/serp",
+        href: "/dashboard/serpList",
         icon: "layer2",
         title: "SERP",
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/registry",
+        href: "/registry-create",
         icon: "layer",
         title: "REGISTRY",
         authorizeOnly: UserRole.ADMIN,

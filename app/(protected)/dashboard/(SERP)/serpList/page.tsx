@@ -20,7 +20,7 @@ export default function SerpList() {
 
   const fetchSerp = async () => {
     try {
-      const serpData = await axios.get("http://localhost:3000/business");
+      const serpData = await axios.get("http://localhost:3000/business?type=SERP");
       setData(serpData.data.data);
     } catch (error) {
       console.log("error fetching the serp from the db.json");

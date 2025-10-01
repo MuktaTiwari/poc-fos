@@ -1,4 +1,8 @@
 "use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,14 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
 
 export interface SerpData {
   id: number;
   name: string;
   type: string;
   isActive: boolean;
+  created_at: Date;
 }
 
 // Pass action handlers as props
@@ -23,12 +26,10 @@ export const getColumns = (
   handleDelete: (row: SerpData) => void,
 ): ColumnDef<SerpData>[] => [
   {
-    accessorKey: "id",
-    header: "Id",
-  },
-  {
     accessorKey: "name",
     header: "Name",
+    enableSorting: true,
+
   },
   {
     accessorKey: "type",
@@ -42,15 +43,18 @@ export const getColumns = (
       return (
         <span
           className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-            isActive
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+            isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
           }`}
         >
           {isActive ? "Active" : "Inactive"}
         </span>
       );
     },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) => new Date(row.getValue("createdAt")).toLocaleDateString(),
   },
   {
     id: "actions",

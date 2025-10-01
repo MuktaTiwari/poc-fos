@@ -15,11 +15,11 @@ export interface SERPFormData {
   parentId?: string;
   isActive?: boolean;
   companyName?: string;
-  panNumber?: string;
-  tan?: string;
-  gst?: string;
+  panNo?: string;
+  tanNo?: string;
+  gstNo?: string;
   address?: string;
-  pinCode?: string;
+  pincode?: string;
   state?: string;
   country?: string;
 }
@@ -61,11 +61,11 @@ export default function SerpEditPage() {
           parentId: data.perpId || "", // <-- use perpId from API
           isActive: data.isActive ?? false,
           companyName: data.companyName || "",
-          panNumber: data.panNumber || "",
-          tan: data.tan || "",
-          gst: data.gst || "",
+          panNo: data.panNo || "",
+          tanNo: data.tanNo || "",
+          gstNo: data.gstNo || "",
           address: data.address || "",
-          pinCode: data.pinCode || "",
+          pincode: data.pincode || "",
           state: data.state || "",
           country: data.country || "",
         });
@@ -108,11 +108,11 @@ export default function SerpEditPage() {
         isActive: formData.isActive,
       };
       if (formData.companyName) payload.companyName = formData.companyName;
-      if (formData.panNumber) payload.panNumber = formData.panNumber;
-      if (formData.tan) payload.tan = formData.tan;
-      if (formData.gst) payload.gst = formData.gst;
+      if (formData.panNo) payload.panNo = formData.panNo;
+      if (formData.tanNo) payload.tanNo = formData.tanNo;
+      if (formData.gstNo) payload.gstNo = formData.gstNo;
       if (formData.address) payload.address = formData.address;
-      if (formData.pinCode) payload.pinCode = formData.pinCode;
+      if (formData.pincode) payload.pincode = formData.pincode;
       if (formData.state) payload.state = formData.state;
       if (formData.country) payload.country = formData.country;
 
@@ -199,29 +199,29 @@ export default function SerpEditPage() {
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="panNumber">PAN Number</Label>
+              <Label htmlFor="panNo">PAN Number</Label>
               <Input
-                id="panNumber"
-                name="panNumber"
-                value={formData.panNumber || ""}
+                id="panNo"
+                name="panNo"
+                value={formData.panNo || ""}
                 onChange={handleInputChange}
               />
             </div>
             <div>
-              <Label htmlFor="tan">TAN</Label>
+              <Label htmlFor="tanNo">TAN</Label>
               <Input
-                id="tan"
-                name="tan"
-                value={formData.tan || ""}
+                id="tanNo"
+                name="tanNo"
+                value={formData.tanNo || ""}
                 onChange={handleInputChange}
               />
             </div>
             <div>
-              <Label htmlFor="gst">GST</Label>
+              <Label htmlFor="gstNo">GST</Label>
               <Input
-                id="gst"
-                name="gst"
-                value={formData.gst || ""}
+                id="gstNo"
+                name="gstNo"
+                value={formData.gstNo || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -243,11 +243,11 @@ export default function SerpEditPage() {
           {/* Pin Code, State, Country */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="pinCode">Pin Code</Label>
+              <Label htmlFor="pincode">Pin Code</Label>
               <Input
-                id="pinCode"
-                name="pinCode"
-                value={formData.pinCode || ""}
+                id="pincode"
+                name="pincode"
+                value={formData.pincode || ""}
                 onChange={handleInputChange}
               />
             </div>
