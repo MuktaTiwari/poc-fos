@@ -4,22 +4,23 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios"; // Import axios
-import { MoreHorizontal } from "lucide-react"; // Import MoreHorizontal
+import { EditIcon, MoreHorizontal, Trash2 } from "lucide-react"; // Import MoreHorizontal
 
+import { DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Import DropdownMenu components
+} from "@/components/ui/dropdown-menu";
+import { DashboardHeader } from "@/components/dashboard/header";
 
-import { columns, data } from './column';
+// Import DropdownMenu components
 
+import { columns, data } from "./column";
 import { DeleteOrganizationDialog } from "./deleteOrganizationDialog"; // Import DeleteOrganizationDialog
-import { DataTable } from "@/components/ui/data-table";
 
 // import { DataTable } from '../../ui/data-table'; // Adjust the import path as necessary
-
 
 export default function OrganizationPage() {
   const router = useRouter();
@@ -29,18 +30,18 @@ export default function OrganizationPage() {
 
   const fetchOrganizations = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`);
-      const result = response.data;
-      const fetchedOrganizations: data[] = result.data.map(
-        (org: any) => ({
-          ...org,
-          isActive: org.isActive ? "active" : "inactive",
-          createdAt: new Date(org.createdAt),
-          updatedAt: new Date(org.updatedAt),
-          code: org.code || "N/A",
-          level: org.level || 0,
-        }),
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`,
       );
+      const result = response.data;
+      const fetchedOrganizations: data[] = result.data.map((org: any) => ({
+        ...org,
+        isActive: org.isActive ? "active" : "inactive",
+        createdAt: new Date(org.createdAt),
+        updatedAt: new Date(org.updatedAt),
+        code: org.code || "N/A",
+        level: org.level || 0,
+      }));
       setOrganizations(fetchedOrganizations);
     } catch (e: any) {
       setError(e.message);
@@ -67,15 +68,23 @@ export default function OrganizationPage() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
-              <DropdownMenuItem className="dark:hover:bg-gray-700 dark:hover:text-white">
+              <DropdownMenuItem
+                className="px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                onClick={() =>
+                  router.push(`/dashboard/org/update/${row.original.id}`)
+                }
+              >
                 Edit
               </DropdownMenuItem>
+
               <DropdownMenuItem asChild>
                 <DeleteOrganizationDialog
                   organizationId={row.original.id}
                   onSuccess={fetchOrganizations}
                 >
-                  <button className="w-full text-left">Delete</button>
+                  <button className="w-full px-4 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                    Delete
+                  </button>
                 </DeleteOrganizationDialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -89,13 +98,11 @@ export default function OrganizationPage() {
   return (
     <div className="container mx-auto py-10">
       <div className="mb-4 flex items-center justify-between">
+        <DashboardHeader
+          heading="Organization List"
+          text="Access only for users with ADMIN role."
+        />
         <div className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            Organization List
-          </span>
-        </div>
-        <div className="flex items-center space-x-2">
-          
           <Link
             href="/dashboard/org/new"
             className="rounded bg-gray-800 px-6 py-2 text-sm text-white hover:bg-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"

@@ -88,37 +88,18 @@ export const columns: ColumnDef<data>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => (
+    cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex items-center justify-center rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">
-            <MoreHorizontal className="h-5 w-5" />
-            <span className="sr-only">Open menu</span>
+          <button className="rounded p-2 text-gray-600 hover:bg-gray-100">
+            ...
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
-          <DropdownMenuItem className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white">
-            <EditIcon className="h-4 w-4 text-blue-500" />
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            asChild
-            className="flex items-center gap-2 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <DeleteOrganizationDialog
-              organizationId={row.original.id}
-              onSuccess={() => {
-                /* This will be replaced by a function from demo.tsx */
-              }}
-            >
-              <button className="flex w-full items-center gap-2 text-left">
-                <Trash2Icon className="h-4 w-4 text-red-500" />
-                Delete
-              </button>
-            </DeleteOrganizationDialog>
-          </DropdownMenuItem>
+        <DropdownMenuContent className="w-36">
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
-  }
+  },
 ];
