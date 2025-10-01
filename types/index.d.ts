@@ -27,7 +27,11 @@ export type NavItem = {
 
 export type MainNavItem = NavItem;
 
+export type SidebarNavItem = {
+  title: string;
+  items: NavItem[];
+};
+
 export type MarketingConfig = {
   mainNav: MainNavItem[];
 };
-
