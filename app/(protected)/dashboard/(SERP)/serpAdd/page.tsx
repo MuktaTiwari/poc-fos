@@ -25,7 +25,6 @@ export interface SERPFormData {
   type: string;
   parentId?: string;
   isActive?: boolean;
-  companyName?: string;
   panNo?: string;
   tanNo?: string;
   gstNo?: string;
@@ -78,7 +77,6 @@ export default function SerpAddPage() {
         parentId: formData.parentId,
       };
 
-      if (formData.companyName) payload.companyName = formData.companyName;
       if (formData.panNo) payload.panNo = formData.panNo;
       if (formData.tanNo) payload.tanNo = formData.tanNo;
       if (formData.gstNo) payload.gstNo = formData.gstNo;
@@ -104,7 +102,7 @@ export default function SerpAddPage() {
   return (
     <Form {...form}>
       <DashboardHeader
-        heading="Add Org form"
+        heading="Add SERP form"
         text="Access only for users with ADMIN role."
       />
 
@@ -121,7 +119,7 @@ export default function SerpAddPage() {
             required
           />
           <p className="text-sm text-muted-foreground mt-2">
-            Enter the registry name.
+            Enter the serp name.
           </p>
         </div>
 
@@ -172,17 +170,6 @@ export default function SerpAddPage() {
           <p className="text-sm text-muted-foreground  mt-2">
             Choose the parent PERP (if applicable).
           </p>
-        </div>
-
-        {/* Company Name */}
-        <div>
-          <Label htmlFor="companyName">Company Name</Label>
-          <Input
-            id="companyName"
-            name="companyName"
-            value={formData.companyName || ""}
-            onChange={handleInputChange}
-          />
         </div>
 
         {/* PAN, TAN, GST */}

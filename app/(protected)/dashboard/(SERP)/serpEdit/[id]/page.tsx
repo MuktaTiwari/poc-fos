@@ -14,7 +14,6 @@ export interface SERPFormData {
   type: string;
   parentId?: string;
   isActive?: boolean;
-  companyName?: string;
   panNo?: string;
   tanNo?: string;
   gstNo?: string;
@@ -58,9 +57,8 @@ export default function SerpEditPage() {
           id: data.id,
           name: data.name || "",
           type: data.type || "",
-          parentId: data.perpId || "", // <-- use perpId from API
+          parentId: data.perpId || "",
           isActive: data.isActive ?? false,
-          companyName: data.companyName || "",
           panNo: data.panNo || "",
           tanNo: data.tanNo || "",
           gstNo: data.gstNo || "",
@@ -107,7 +105,6 @@ export default function SerpEditPage() {
         parentId: formData.parentId,
         isActive: formData.isActive,
       };
-      if (formData.companyName) payload.companyName = formData.companyName;
       if (formData.panNo) payload.panNo = formData.panNo;
       if (formData.tanNo) payload.tanNo = formData.tanNo;
       if (formData.gstNo) payload.gstNo = formData.gstNo;
@@ -185,18 +182,6 @@ export default function SerpEditPage() {
               ))}
             </select>
           </div>
-
-          {/* Optional Fields */}
-          <div>
-            <Label htmlFor="companyName">Company Name</Label>
-            <Input
-              id="companyName"
-              name="companyName"
-              value={formData.companyName || ""}
-              onChange={handleInputChange}
-            />
-          </div>
-
           <div className="grid grid-cols-3 gap-4">
             <div>
               <Label htmlFor="panNo">PAN Number</Label>
