@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import { getColumns, SerpData } from "../columns";
+import { getColumns, SerpData } from "./columns";
 
 export default function SerpList() {
   const [data, setData] = useState<SerpData[]>([]);
@@ -28,12 +28,12 @@ export default function SerpList() {
   };
 
   const handleEdit = (row: SerpData) => {
-    router.push(`/dashboard/serpEdit/${encodeURIComponent(row.id)}`);
+    router.push(`/edit/${encodeURIComponent(row.id)}`);
   };
 
   const handleDelete = (row: SerpData) => {
     // Navigate to delete page with item details
-    router.push(`/dashboard/serpDelete?id=${row.id}`);
+    router.push(`/delete?id=${row.id}`);
   };
 
   const columns = getColumns(handleEdit, handleDelete);
@@ -47,7 +47,7 @@ export default function SerpList() {
         />
 
         <Button
-          onClick={() => router.push("/dashboard/serpAdd")}
+          onClick={() => router.push("/create")}
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors duration-300 hover:bg-primary/90"
         >
           Add SERP
