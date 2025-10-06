@@ -12,34 +12,32 @@ export const serpSchema = z.object({
     }),
   }),
 
-  parentId: z
-  .string()
-  .optional(),
+  parentId: z.string().optional(),
   isActive: z.boolean().optional(),
 
   panNo: z
     .string()
-    // .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, "Invalid PAN format (e.g. ABCDE1234F)")
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, "PAN number must be in format XXXXX9999X (e.g., ABCDE1234F)")
     .optional(),
 
   tanNo: z
     .string()
-    // .regex(/^[A-Z]{4}[0-9]{5}[A-Z]{1}$/, "Invalid TAN format")
+    .regex(/^[A-Z]{4}[0-9]{5}[A-Z]{1}$/, "TAN number must be in format XXXX99999X (e.g., ABCD12345E)")
     .optional(),
 
   gstNo: z
     .string()
-    // .regex(
-    //   /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-    //   "Invalid GST format"
-    // )
+    .regex(
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+      "GST number must be in format 99XXXXX9999X9X9X (e.g., 29ABCDE1234F1Z5)"
+    )
     .optional(),
 
   address: z.string().max(250, "Address too long").optional(),
 
   pincode: z
     .string()
-    // .regex(/^\d{6}$/, "Pincode must be 6 digits")
+    .regex(/^\d{6}$/, "Pincode must be exactly 6 digits (e.g., 560001)")
     .optional(),
 
   state: z.string().optional(),

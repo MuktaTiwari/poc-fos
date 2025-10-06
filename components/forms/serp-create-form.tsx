@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { SERPFormData } from "@/lib/type";
 import { serpSchema } from "@/lib/validations/serpValidation";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -14,8 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import * as z from "zod";
-import { SERPFormData } from "@/lib/type";
 
 type SerpFormType = z.infer<typeof serpSchema>;
 
@@ -26,7 +27,12 @@ interface SerpFormProps {
   onCancel?: () => void;
 }
 
-export default function SerpForm({ initialData, parentOptions, onSubmit, onCancel }: SerpFormProps) {
+export default function SerpForm({
+  initialData,
+  parentOptions,
+  onSubmit,
+  onCancel,
+}: SerpFormProps) {
   const form = useForm<SerpFormType>({
     resolver: zodResolver(serpSchema),
     defaultValues: {
@@ -57,8 +63,12 @@ export default function SerpForm({ initialData, parentOptions, onSubmit, onCance
       {/* Name */}
       <div>
         <Label htmlFor="name">Name</Label>
-        <Input id="name" {...register("name")} placeholder="Enter the SERP name" />
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        <Input
+          id="name"
+          {...register("name")}
+          placeholder="Enter the SERP name"
+        />
+        {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>}
       </div>
 
       {/* Type */}
@@ -81,7 +91,7 @@ export default function SerpForm({ initialData, parentOptions, onSubmit, onCance
             <SelectItem value="CU">CU</SelectItem>
           </SelectContent>
         </Select>
-        {errors.type && <p className="text-red-500">{errors.type.message}</p>}
+        {errors.type && <p className="text-red-500 text-sm mt-">{errors.type.message}</p>}
       </div>
 
       {/* Parent */}
@@ -109,14 +119,23 @@ export default function SerpForm({ initialData, parentOptions, onSubmit, onCance
         <div>
           <Label htmlFor="panNo">PAN</Label>
           <Input id="panNo" {...register("panNo")} />
+          {errors.panNo && (
+            <p className="text-red-500 text-sm mt-">{errors.panNo.message}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="tanNo">TAN</Label>
           <Input id="tanNo" {...register("tanNo")} />
+          {errors.tanNo && (
+            <p className="text-red-500 text-sm mt-">{errors.tanNo.message}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="gstNo">GST</Label>
           <Input id="gstNo" {...register("gstNo")} />
+          {errors.gstNo && (
+            <p className="text-red-500 text-sm mt-">{errors.gstNo.message}</p>
+          )}
         </div>
       </div>
 
@@ -136,7 +155,9 @@ export default function SerpForm({ initialData, parentOptions, onSubmit, onCance
         <div>
           <Label htmlFor="pincode">Pin Code</Label>
           <Input id="pincode" {...register("pincode")} />
-          {errors.pincode && <p className="text-red-500">{errors.pincode.message}</p>}
+          {errors.pincode && (
+            <p className="text-red-500 text-sm mt-">{errors.pincode.message}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="state">State</Label>
@@ -144,7 +165,10 @@ export default function SerpForm({ initialData, parentOptions, onSubmit, onCance
         </div>
         <div>
           <Label htmlFor="country">Country</Label>
-          <select {...register("country")} className="w-full rounded-md border p-2">
+          <select
+            {...register("country")}
+            className="w-full rounded-md border p-2"
+          >
             <option value="">Select Country</option>
             <option value="India">India</option>
             <option value="USA">USA</option>
