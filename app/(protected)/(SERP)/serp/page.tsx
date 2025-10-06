@@ -33,7 +33,7 @@ export default function SerpList() {
 
   const handleDelete = (row: SerpData) => {
     // Navigate to delete page with item details
-    router.push(`/delete?id=${row.id}`);
+    router.push(`/delete/${row.id}`);
   };
 
   const columns = getColumns(handleEdit, handleDelete);
