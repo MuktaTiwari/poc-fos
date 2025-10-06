@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
-import { toast } from 'sonner';
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -29,7 +29,7 @@ import {
 
 type OrgFormProps = {
   isEdit?: boolean;
-  id?: string;          // required only if isEdit
+  id?: string; // required only if isEdit
 };
 
 const formSchema = z.object({
@@ -37,11 +37,38 @@ const formSchema = z.object({
   type: z.string().nonempty("Type is required"),
   registry: z.string().optional(),
   parentId: z.string().optional(),
-  panNo: z.string().optional(),
-  gstNo: z.string().optional(),
-  tanNo: z.string().optional(),
+  panNo: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(val),
+      "PAN number must be in format XXXXX9999X (e.g., ABCDE1234F)",
+    ),
+  tanNo: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[A-Z]{4}[0-9]{5}[A-Z]$/.test(val),
+      "TAN number must be in format XXXX99999X (e.g., ABCD12345E)",
+    ),
+    
+  gstNo: z
+    .string()
+    .optional()
+    .refine(
+      (val) =>
+        !val ||
+        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(val),
+      "GST number must be in format 99XXXXX9999X9X9X (e.g., 29ABCDE1234F1Z5)",
+    ),
+  pincode: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[0-9]{6}$/.test(val),
+      "Pincode must be exactly 6 digits (e.g., 560001)",
+    ),
   address: z.string().optional(),
-  pincode: z.string().optional(),
   state: z.string().optional(),
   country: z.string().optional(),
   isActive: z.boolean().default(true),
@@ -83,7 +110,9 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
         // Fetch registries
-        const registriesRes = await axios.get(`${baseUrl}/business?type=REGISTRY`);
+        const registriesRes = await axios.get(
+          `${baseUrl}/business?type=REGISTRY`,
+        );
         const allRegistries = registriesRes.data?.data ?? [];
         setRegistries(allRegistries);
 
@@ -127,24 +156,34 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
       setSaving(true);
       const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
+      // Remove blank optional fields
+      const payload = Object.fromEntries(
+        Object.entries(values).filter(([_, v]) => v !== "" && v !== null),
+      );
+
+      // Add parentId logic
+      payload.parentId = values.registry || values.parentId || "";
+
       if (isEdit && id) {
-        await axios.patch(`${baseUrl}/business/${id}`, {
-          ...values,
-          parentId: values.registry || values.parentId || null,
-        });
+        await axios.patch(`${baseUrl}/business/${id}`, payload);
         toast.success("Organization updated successfully!");
       } else {
-        await axios.post(`${baseUrl}/business`, {
-          ...values,
-          parentId: values.registry || null,
-        });
+        await axios.post(`${baseUrl}/business`, payload);
         toast.success("Organization created successfully!");
       }
 
       router.push("/org");
-    } catch (err) {
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        // Show backend validation errors
+        const messages = Array.isArray(err.response.data.message)
+          ? err.response.data.message.join("\n")
+          : err.response.data.message;
+        toast.error(messages);
+      } else {
+        toast.error("Failed to save data");
+      }
       console.error("Error saving data:", err);
-      setError("Failed to save data");
     } finally {
       setSaving(false);
     }
@@ -197,7 +236,9 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
                         <SelectItem value="PERP">PERP</SelectItem>
                         <SelectItem value="SERP">SERP</SelectItem>
                         <SelectItem value="REGISTRY">REGISTRY</SelectItem>
-                        <SelectItem value="ORGANIZATION">ORGANIZATION</SelectItem>
+                        <SelectItem value="ORGANIZATION">
+                          ORGANIZATION
+                        </SelectItem>
                         <SelectItem value="CU">CU</SelectItem>
                       </SelectContent>
                     </Select>
@@ -309,4 +350,3 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
     </div>
   );
 }
-
