@@ -13,8 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
-// import { createRegistry } from '@/actions/create-registry';
 import { registrySchema } from '@/lib/validations/registry';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,9 +28,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icons } from '@/components/shared/icons';
 import axios from 'axios';
-
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { env } from '@/env.mjs';
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Registry {
   id: string;
@@ -90,7 +88,6 @@ export default function RegistryCreateForm({
       const fetchParents = async () => {
         try {
           const response = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business?type=SERP`);
-          console.log(response.data.data)
           setParentList(response.data.data);
         } catch (error) {
           toast.error('Failed to fetch parent list.');
@@ -294,11 +291,32 @@ export default function RegistryCreateForm({
             )}
           </div>
 
-
+          {isEditMode && (
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      defaultChecked
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Active</FormLabel>
+                    <FormDescription>
+                      Uncheck this to inactivate the registry.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <div className="mt-8 flex justify-end gap-4">
-          {/* {isEditMode && ( */}
           <Button
             type="button"
             variant="outline"
@@ -307,7 +325,6 @@ export default function RegistryCreateForm({
           >
             Back
           </Button>
-          {/* )} */}
           <Button type="submit" disabled={isPending}>
             {isPending && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />

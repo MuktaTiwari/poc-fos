@@ -6,11 +6,26 @@ import axios from "axios"
 
 import { DashboardHeader } from "@/components/dashboard/header"
 import RegistryCreateForm from "@/components/forms/registry-create-form"
-
-// We can use the same Registry type from the column definition
-import { Registry } from "@/app/(registry)/registry/column"
 import { useRouter } from "next/navigation"
 import { env } from "@/env.mjs"
+
+interface Registry {
+  id: string;
+  name: string;
+  type: string;
+  isActive: boolean;
+  parentId?: string;
+  panNo?: string,
+  tanNo?: string,
+  gstNo?: string,
+  address?: string,
+  pincode?: string,
+  state?: string,
+  country?: string,
+  immediateParent?: {
+    id: string;
+  }
+}
 
 export default function EditRegistryPage() {
   const params = useParams()
@@ -28,7 +43,12 @@ export default function EditRegistryPage() {
           const response = await axios.get(
             `${env.NEXT_PUBLIC_APP_URL}/business/${id}`
           )
-          setRegistry(response.data.data)
+          const data = response.data.data;
+          const registryData = {
+            ...data,
+            parentId: data.immediateParent?.id
+          }
+          setRegistry(registryData)
           setError(null)
         } catch (err) {
           setError("Failed to fetch registry data.")
