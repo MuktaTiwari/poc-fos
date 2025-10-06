@@ -31,20 +31,22 @@ export default function SerpDeletePage() {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
+    const fetchItemDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/business/${id}`,
+        );
+        // Based on your SerpList component, the data might be nested in a data property
+        setItem(response.data.data || response.data);
+      } catch (error) {
+        console.error("Error fetching item details:", error);
+      }
+    };
+
     if (id) {
       fetchItemDetails();
     }
   }, [id]);
-
-  const fetchItemDetails = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/business/${id}`);
-      // Based on your SerpList component, the data might be nested in a data property
-      setItem(response.data.data || response.data);
-    } catch (error) {
-      console.error("Error fetching item details:", error);
-    }
-  };
 
   const handleDelete = async () => {
     if (!id) return;
@@ -68,7 +70,7 @@ export default function SerpDeletePage() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete "{item?.name || `Item ${id}`}"?
+            Delete &quot;{item?.name || `SERP ${id}`}&quot;?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. If you delete this SERP, all its child
@@ -83,7 +85,7 @@ export default function SerpDeletePage() {
           <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center justify-center">
-                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                <div className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                 Deleting...
               </div>
             ) : (

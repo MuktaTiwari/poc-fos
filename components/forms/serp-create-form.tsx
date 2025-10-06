@@ -68,7 +68,7 @@ export default function SerpForm({
           {...register("name")}
           placeholder="Enter the SERP name"
         />
-        {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>}
+        {errors.name && <p className="mt-2 text-sm text-red-500">{errors.name.message}</p>}
       </div>
 
       {/* Type */}
@@ -91,7 +91,7 @@ export default function SerpForm({
             <SelectItem value="CU">CU</SelectItem>
           </SelectContent>
         </Select>
-        {errors.type && <p className="text-red-500 text-sm mt-">{errors.type.message}</p>}
+        {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
       </div>
 
       {/* Parent */}
@@ -120,21 +120,21 @@ export default function SerpForm({
           <Label htmlFor="panNo">PAN</Label>
           <Input id="panNo" {...register("panNo")} />
           {errors.panNo && (
-            <p className="text-red-500 text-sm mt-">{errors.panNo.message}</p>
+            <p className="text-sm text-red-500">{errors.panNo.message}</p>
           )}
         </div>
         <div>
           <Label htmlFor="tanNo">TAN</Label>
           <Input id="tanNo" {...register("tanNo")} />
           {errors.tanNo && (
-            <p className="text-red-500 text-sm mt-">{errors.tanNo.message}</p>
+            <p className="text-sm text-red-500">{errors.tanNo.message}</p>
           )}
         </div>
         <div>
           <Label htmlFor="gstNo">GST</Label>
           <Input id="gstNo" {...register("gstNo")} />
           {errors.gstNo && (
-            <p className="text-red-500 text-sm mt-">{errors.gstNo.message}</p>
+            <p className="text-sm text-red-500">{errors.gstNo.message}</p>
           )}
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function SerpForm({
           <Label htmlFor="pincode">Pin Code</Label>
           <Input id="pincode" {...register("pincode")} />
           {errors.pincode && (
-            <p className="text-red-500 text-sm mt-">{errors.pincode.message}</p>
+            <p className="text-sm text-red-500">{errors.pincode.message}</p>
           )}
         </div>
         <div>
@@ -184,7 +184,7 @@ export default function SerpForm({
           id="isActive"
           {...register("isActive")}
           defaultChecked={initialData?.isActive ?? true}
-          className="h-5 w-5"
+          className="size-5"
         />
         <Label htmlFor="isActive">Active</Label>
       </div>
