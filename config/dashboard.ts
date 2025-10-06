@@ -19,7 +19,7 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/registry-list",
+        href: "/registry",
         icon: "layer",
         title: "REGISTRY",
         authorizeOnly: UserRole.ADMIN,

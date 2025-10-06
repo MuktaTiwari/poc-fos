@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -15,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
+import axios from "axios"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -33,17 +33,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { DashboardHeader } from "@/components/dashboard/header"
+import { getColumns, type Registry } from "./column"
+import { env } from "@/env.mjs"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
-
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function ListRegistry() {
   const router = useRouter()
+  const [data, setData] = React.useState<Registry[]>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -51,6 +46,21 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business?type=REGISTRY`)
+        setData(response.data.data)
+      } catch (error) {
+        console.error("Failed to fetch data:", error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const columns = getColumns(router)
 
   const table = useReactTable({
     data,
@@ -75,14 +85,13 @@ export function DataTable<TData, TValue>({
     <div className="w-full">
       <div className="flex items-center justify-between">
         <DashboardHeader
-          heading="Organization List"
+          heading="Registry List"
           text="Manage your registries."
         />
-        <Button className="px-6 py-2" onClick={() => router.push("/registry-create")}>Add</Button>
+        <Button className="px-6 py-2" onClick={() => router.push("/registry/create")}>Add Registry</Button>
       </div>
       <div className="flex items-center py-4">
         <Input
-
           placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
