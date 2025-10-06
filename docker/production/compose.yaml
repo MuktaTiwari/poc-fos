@@ -1,0 +1,8 @@
+services:
+  poc-fos-production:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: poc-fos-production
+    ports:
+      - "${HOST_PORT:-3003}:80"

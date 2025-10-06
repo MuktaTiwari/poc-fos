@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <div>
       <DashboardHeader
-        heading="Add Org form"
+        heading="Add Registry form"
         text="Access only for users with ADMIN role."
       />
       <RegistryCreateForm router={router} />
