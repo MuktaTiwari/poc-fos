@@ -36,6 +36,13 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "CONSUMER UNIT",
         authorizeOnly: UserRole.ADMIN,
       },
+
+       {
+        href: "/allAdmin",
+        icon: "shapes",
+        title: "All Admin",
+        authorizeOnly: UserRole.ADMIN,
+      },
     ],
   },
   {
