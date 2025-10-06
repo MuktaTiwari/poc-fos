@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import { DeleteOrganizationDialog } from "../delete/deleteOrganizationDialog";
 // import Demo from "./demo";
 import { columns, data } from "./column";
-import { DeleteOrganizationDialog } from "../delete/deleteOrganizationDialog";
+
 // import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
 
 export default function ListOrganization() {
@@ -29,7 +30,7 @@ export default function ListOrganization() {
   const fetchOrganizations = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`,
       );
       const result = response.data;
       const fetchedOrganizations: data[] = result.data.map((org: any) => ({
@@ -66,7 +67,7 @@ export default function ListOrganization() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
               <DropdownMenuItem
-                className="px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="px-4 py-2 text-sm font-medium text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 onClick={() => router.push(`/org/edit/${row.original.id}`)}
               >
                 Edit
@@ -75,9 +76,10 @@ export default function ListOrganization() {
               <DropdownMenuItem asChild>
                 <DeleteOrganizationDialog
                   organizationId={row.original.id}
+                  organizationName={row.original.name}
                   onSuccess={fetchOrganizations}
                 >
-                  <button className="w-full px-4 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                  <button className="w-full px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-700">
                     Delete
                   </button>
                 </DeleteOrganizationDialog>
@@ -93,9 +95,7 @@ export default function ListOrganization() {
   return (
     <div className="container mx-auto py-10">
       {/* Optional Demo Section */}
-      <div className="mb-8">
-        {/* <Demo /> */}
-      </div>
+      <div className="mb-8">{/* <Demo /> */}</div>
 
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
@@ -113,13 +113,22 @@ export default function ListOrganization() {
       </div>
 
       {loading ? (
-        <div className="text-center dark:text-white">Loading organizations...</div>
+        <div className="text-center dark:text-white">
+          Loading organizations...
+        </div>
       ) : (
         <>
           {error && (
             <div className="mb-4 text-center text-red-500">Error: {error}</div>
           )}
-          <DataTable columns={columnsWithActions} data={organizations} />
+          <DataTable
+            columns={columnsWithActions}
+            data={
+              organizations
+                .map((org) => ({ ...org, email: org.name })) // for search
+               
+            }
+          />
         </>
       )}
     </div>

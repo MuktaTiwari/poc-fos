@@ -92,6 +92,7 @@ export default function RegistryCreateForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        
         <div className="w-full space-y-8">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>

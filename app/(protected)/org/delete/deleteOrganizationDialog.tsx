@@ -1,7 +1,6 @@
 "use client";
 
 import axios from "axios";
-import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -14,28 +13,39 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DeleteOrganizationDialogProps {
   children: React.ReactNode;
   organizationId: string;
+  organizationName: string;
   onSuccess: () => void;
 }
 
 export function DeleteOrganizationDialog({
   children,
   organizationId,
+  organizationName,
   onSuccess,
 }: DeleteOrganizationDialogProps) {
+  const { toast } = useToast();
+
   const handleDelete = async () => {
     try {
       const baseurl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
       await axios.delete(`${baseurl}/business/${organizationId}`);
-      toast.success(
-        "Organization and all related data have been deleted successfully",
-      );
+      toast({
+        title: `Organization "${organizationName}" deleted`,
+        description: `The organization "${organizationName}" and all related data were removed.`,
+        variant: "destructive",
+      });
       onSuccess();
     } catch (error) {
-      toast.error("Failed to delete the organization ");
+      toast({
+        title: "Failed to delete",
+        description: `Something went wrong while deleting "${organizationName}".`,
+        variant: "destructive",
+      });
       console.error("Error deleting organization:", error);
     }
   };
@@ -43,25 +53,23 @@ export function DeleteOrganizationDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent className="border border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900 sm:max-w-md">
+      <AlertDialogContent className="border border-gray-200 bg-white shadow-lg sm:max-w-md">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-lg font-semibold text-red-700">
+          <AlertDialogTitle className="text-lg font-semibold text-red-500">
             Delete Organization
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-sm text-gray-700 dark:text-gray-300">
-            Are you sure you want to delete this organization? <br />
-            <strong className="text-red-600">
-              This action is permanent!
-            </strong>{" "}
-            All data related to this organization, 
+          <AlertDialogDescription className="text-sm text-gray-600">
+            Are you sure you want to delete <strong>{organizationName}</strong>? <br />
+            <strong className="text-red-400">This action is permanent!</strong>{" "}
+            All data related to this organization will be removed.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <AlertDialogFooter className="space-x-2">
+          <AlertDialogCancel className="rounded bg-gray-100 px-4 py-2 text-gray-700 hover:bg-gray-200">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            className="rounded bg-red-100 px-4 py-2 text-red-700 hover:bg-red-200"
             onClick={handleDelete}
           >
             Delete
