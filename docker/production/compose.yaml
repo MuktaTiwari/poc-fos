@@ -5,4 +5,4 @@ services:
       dockerfile: docker/production/Dockerfile
     image: poc-fos-production
     ports:
-      - "3003:80"
+      - "${HOST_PORT:-3003}:80"
