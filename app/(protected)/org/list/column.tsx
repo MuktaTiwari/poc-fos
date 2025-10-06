@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import {
+  ArrowUpDown,
   EditIcon,
   EyeIcon,
   MoreHorizontal,
@@ -9,6 +10,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,7 +57,19 @@ export const columns: ColumnDef<data>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="flex items-center gap-1"
+      >
+        Name <ArrowUpDown className="h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <div className="text-left lowercase">{row.getValue("name")}</div>
+    ),
+    meta: { align: "left" },
   },
 
   {
@@ -70,8 +84,7 @@ export const columns: ColumnDef<data>[] = [
       const cellValue = row.getValue(id) as string;
       return cellValue?.toLowerCase().startsWith(value.toLowerCase());
     },
-  }
-  ,  
+  },
   {
     accessorKey: "isActive",
     header: "Status",

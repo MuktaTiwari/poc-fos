@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -33,7 +33,7 @@ type OrgFormProps = {
 };
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name is required"),
+  name: z.string().nonempty("Name is required"),
   type: z.string().nonempty("Type is required"),
   registry: z.string().optional(),
   parentId: z.string().optional(),
@@ -132,11 +132,13 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
           ...values,
           parentId: values.registry || values.parentId || null,
         });
+        toast.success("Organization updated successfully!");
       } else {
         await axios.post(`${baseUrl}/business`, {
           ...values,
           parentId: values.registry || null,
         });
+        toast.success("Organization created successfully!");
       }
 
       router.push("/org");
