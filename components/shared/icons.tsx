@@ -1,7 +1,9 @@
 import {
+  Album,
   AlertTriangle,
   ArrowRight,
   ArrowUpRight,
+  AtSign,
   BookOpen,
   Check,
   ChevronLeft,
@@ -14,28 +16,42 @@ import {
   Home,
   Image,
   Laptop,
+  Layers,
+  Layers2,
   LayoutPanelLeft,
   LineChart,
   Loader2,
   LucideIcon,
   LucideProps,
+  MessageCircle,
+  MessageSquare,
+  MessageSquareText,
   MessagesSquare,
   Moon,
   MoreVertical,
   Package,
+  Phone,
   Plus,
   Pyramid,
   Search,
   Settings,
+  Shapes,
+  SquareStack,
   SunMedium,
   Trash2,
   User,
   X,
 } from "lucide-react";
+import { Layer } from "recharts";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  whatsApp: MessageCircle,
+  sms: MessageSquare,
+  rcs: MessageSquareText,
+  email: AtSign,
+  voice: Phone,
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
@@ -86,6 +102,8 @@ export const Icons = {
   laptop: Laptop,
   lineChart: LineChart,
   logo: Pyramid,
+  layer: Layers,
+  layer2: Layers2,
   media: Image,
   messages: MessagesSquare,
   moon: Moon,
@@ -96,6 +114,8 @@ export const Icons = {
   settings: Settings,
   spinner: Loader2,
   sun: SunMedium,
+  shapes: Shapes,
+  squareStack: SquareStack,
   trash: Trash2,
   twitter: ({ ...props }: LucideProps) => (
     <svg
@@ -116,4 +136,6 @@ export const Icons = {
   ),
   user: User,
   warning: AlertTriangle,
+  album: Album,
 };
+
