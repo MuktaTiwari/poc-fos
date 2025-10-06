@@ -1,0 +1,156 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { perpSchema } from "@/lib/validations/perpValidation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import * as z from "zod";
+import { PERPFormData } from "@/lib/type";
+
+type PerpFormType = z.infer<typeof perpSchema>;
+
+interface PerpFormProps {
+  initialData?: PERPFormData; // for edit
+  onSubmit: (data: PerpFormType) => void;
+  onCancel?: () => void;
+}
+
+export default function PerpForm({ initialData, onSubmit, onCancel }: PerpFormProps) {
+  const form = useForm<PerpFormType>({
+    resolver: zodResolver(perpSchema),
+    defaultValues: {
+      name: initialData?.name || "",
+      type: initialData?.type || "PERP", // Default to PERP
+      panNo: initialData?.panNo || "",
+      tanNo: initialData?.tanNo || "",
+      gstNo: initialData?.gstNo || "",
+      address: initialData?.address || "",
+      pincode: initialData?.pincode || "",
+      state: initialData?.state || "",
+      country: initialData?.country || "",
+      isActive: initialData?.isActive ?? true,
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Name */}
+      <div>
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" {...register("name")} placeholder="Enter the PERP name" />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+      </div>
+
+      {/* Type */}
+      <div>
+        <Label htmlFor="type">Type</Label>
+        <Select
+          value={watch("type") || "PERP"}
+          onValueChange={(val: "PERP" | "SERP" | "REGISTRY" | "ORG" | "CU") =>
+            setValue("type", val)
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="PERP">PERP</SelectItem>
+            <SelectItem value="SERP">SERP</SelectItem>
+            <SelectItem value="REGISTRY">REGISTRY</SelectItem>
+            <SelectItem value="ORG">ORG</SelectItem>
+            <SelectItem value="CU">CU</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.type && <p className="text-red-500">{errors.type.message}</p>}
+      </div>
+
+      {/* PAN, TAN, GST */}
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <Label htmlFor="panNo">PAN</Label>
+          <Input id="panNo" {...register("panNo")} />
+        </div>
+        <div>
+          <Label htmlFor="tanNo">TAN</Label>
+          <Input id="tanNo" {...register("tanNo")} />
+        </div>
+        <div>
+          <Label htmlFor="gstNo">GST</Label>
+          <Input id="gstNo" {...register("gstNo")} />
+        </div>
+      </div>
+
+      {/* Address */}
+      <div>
+        <Label htmlFor="address">Address</Label>
+        <textarea
+          id="address"
+          {...register("address")}
+          className="w-full rounded-md border p-2"
+          rows={3}
+        />
+      </div>
+
+      {/* Pin, State, Country */}
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <Label htmlFor="pincode">Pin Code</Label>
+          <Input id="pincode" {...register("pincode")} />
+          {errors.pincode && <p className="text-red-500">{errors.pincode.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="state">State</Label>
+          <Input id="state" {...register("state")} />
+        </div>
+        <div>
+          <Label htmlFor="country">Country</Label>
+          <select {...register("country")} className="w-full rounded-md border p-2">
+            <option value="">Select Country</option>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Active */}
+      <div className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          id="isActive"
+          {...register("isActive")}
+          defaultChecked={initialData?.isActive ?? true}
+          className="h-5 w-5"
+        />
+        <Label htmlFor="isActive">Active</Label>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-4">
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        )}
+        <Button type="submit">{initialData ? "Update" : "Save"}</Button>
+      </div>
+    </form>
+  );
+}
