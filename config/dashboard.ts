@@ -71,6 +71,13 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "E-mail",
         authorizeOnly: UserRole.ADMIN,
       },
+
+      {
+        href: "/dashboard/serpList",
+        icon: "logo",
+        title: "SERP",
+        authorizeOnly: UserRole.USER,
+      },
     ],
   },
   {
