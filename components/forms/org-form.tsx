@@ -1,18 +1,18 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { ChevronLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,32 +26,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DashboardHeader } from "@/components/dashboard/header";
 
-// ✅ Zod schema
+type OrgFormProps = {
+  isEdit?: boolean;
+  id?: string;          // required only if isEdit
+};
+
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name is required" }),
+  name: z.string().min(2, "Name is required"),
   type: z.string().nonempty("Type is required"),
-  registry: z.string().nonempty("Registry is required"),
+  registry: z.string().optional(),
   parentId: z.string().optional(),
-  companyName: z.string().optional(),
-  panNumber: z.string().optional(),
-  gstNumber: z.string().optional(),
-  tanNumber: z.string().optional(),
+  panNo: z.string().optional(),
+  gstNo: z.string().optional(),
+  tanNo: z.string().optional(),
   address: z.string().optional(),
-  pinCode: z.string().optional(),
+  pincode: z.string().optional(),
   state: z.string().optional(),
-  city: z.string().optional(),
+  country: z.string().optional(),
+  isActive: z.boolean().default(true),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function NewOrg() {
+export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [registries, setRegistries] = useState<{ id: string; name: string }[]>(
     [],
   );
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -60,57 +65,107 @@ export default function NewOrg() {
       type: "ORGANIZATION",
       registry: "",
       parentId: "",
-      companyName: "",
-      panNumber: "",
-      gstNumber: "",
-      tanNumber: "",
+      panNo: "",
+      gstNo: "",
+      tanNo: "",
       address: "",
-      pinCode: "",
+      pincode: "",
       state: "",
-      city: "",
+      country: "",
+      isActive: true,
     },
   });
 
-  // Fetch registries
   useEffect(() => {
-    const fetchRegistries = async () => {
-      setLoading(true);
+    const fetchData = async () => {
       try {
+        setLoading(true);
         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-        const response = await axios.get(`${baseUrl}/business?type=REGISTRY`);
-        setRegistries(response.data.data || []);
-      } catch (error) {
-        console.error("Failed to fetch registries:", error);
+
+        // Fetch registries
+        const registriesRes = await axios.get(`${baseUrl}/business?type=REGISTRY`);
+        const allRegistries = registriesRes.data?.data ?? [];
+        setRegistries(allRegistries);
+
+        // If edit, fetch org details
+        if (isEdit && id) {
+          const orgRes = await axios.get(`${baseUrl}/business/${id}`);
+          const orgData = orgRes.data?.data ?? orgRes.data;
+
+          const selectedRegistry = allRegistries.find(
+            (r) => r.id === orgData.immediateParent?.id,
+          );
+
+          form.reset({
+            name: orgData?.name ?? "",
+            type: orgData?.type ?? "ORGANIZATION",
+            registry: selectedRegistry?.id ?? "",
+            parentId: orgData.immediateParent?.id ?? "",
+            panNo: orgData?.panNo ?? "",
+            gstNo: orgData?.gstNo ?? "",
+            tanNo: orgData?.tanNo ?? "",
+            address: orgData?.address ?? "",
+            pincode: orgData?.pincode ?? "",
+            state: orgData?.state ?? "",
+            country: orgData?.country ?? "",
+            isActive: Boolean(orgData?.isActive ?? true),
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load data");
       } finally {
         setLoading(false);
       }
     };
-    fetchRegistries();
-  }, []);
+
+    fetchData();
+  }, [id, isEdit, form]);
 
   const onSubmit = async (values: FormValues) => {
     try {
+      setSaving(true);
       const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-      await axios.post(`${baseUrl}/business`, {
-        ...values,
-        parentId: values.registry, // ✅ backend expects registry id as parentId
-      });
-      router.push("/dashboard/org");
-    } catch (error) {
-      console.error("Error saving the data:", error);
+
+      if (isEdit && id) {
+        await axios.patch(`${baseUrl}/business/${id}`, {
+          ...values,
+          parentId: values.registry || values.parentId || null,
+        });
+      } else {
+        await axios.post(`${baseUrl}/business`, {
+          ...values,
+          parentId: values.registry || null,
+        });
+      }
+
+      router.push("/org");
+    } catch (err) {
+      console.error("Error saving data:", err);
+      setError("Failed to save data");
+    } finally {
+      setSaving(false);
     }
   };
 
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div>
-      <DashboardHeader
-        heading="Add Org form"
-        text="Access only for users with ADMIN role."
-      />
+      <h1 className="mb-8 text-3xl font-extrabold text-gray-800">
+        {isEdit ? "Update Organization" : "Add Organization"}
+      </h1>
+
+      {error && (
+        <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Main Fields */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -125,7 +180,6 @@ export default function NewOrg() {
               )}
             />
 
-            {/* Type */}
             <FormField
               control={form.control}
               name="type"
@@ -141,9 +195,7 @@ export default function NewOrg() {
                         <SelectItem value="PERP">PERP</SelectItem>
                         <SelectItem value="SERP">SERP</SelectItem>
                         <SelectItem value="REGISTRY">REGISTRY</SelectItem>
-                        <SelectItem value="ORGANIZATION">
-                          ORGANIZATION
-                        </SelectItem>
+                        <SelectItem value="ORGANIZATION">ORGANIZATION</SelectItem>
                         <SelectItem value="CU">CU</SelectItem>
                       </SelectContent>
                     </Select>
@@ -165,12 +217,10 @@ export default function NewOrg() {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    disabled={loading || registries.length === 0}
+                    disabled={registries.length === 0}
                   >
                     <SelectTrigger>
-                      <SelectValue
-                        placeholder={loading ? "Loading..." : "Select registry"}
-                      />
+                      <SelectValue placeholder="Select registry" />
                     </SelectTrigger>
                     <SelectContent>
                       {registries.map((reg) => (
@@ -186,17 +236,16 @@ export default function NewOrg() {
             )}
           />
 
-          {/* Additional Fields */}
+          {/* Additional fields */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {[
-              { name: "companyName", label: "Company Name" },
-              { name: "panNumber", label: "PAN Number" },
-              { name: "gstNumber", label: "GST Number" },
-              { name: "tanNumber", label: "TAN Number" },
+              { name: "panNo", label: "PAN Number" },
+              { name: "gstNo", label: "GST Number" },
+              { name: "tanNo", label: "TAN Number" },
               { name: "address", label: "Address" },
-              { name: "pinCode", label: "PIN Code" },
+              { name: "pincode", label: "PIN Code" },
               { name: "state", label: "State" },
-              { name: "city", label: "City" },
+              { name: "country", label: "Country" },
             ].map((fieldDef) => (
               <FormField
                 key={fieldDef.name}
@@ -208,7 +257,8 @@ export default function NewOrg() {
                     <FormControl>
                       <Input
                         placeholder={`Enter ${fieldDef.label.toLowerCase()}`}
-                        {...field}
+                        value={field.value as string}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
@@ -218,16 +268,36 @@ export default function NewOrg() {
             ))}
           </div>
 
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="col-span-1 mt-2 flex items-center space-x-3 md:col-span-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Active</FormLabel>
+              </FormItem>
+            )}
+          />
+
           {/* Actions */}
           <div className="mt-4 flex flex-wrap justify-end gap-4">
-            <Button type="submit" className="rounded-lg px-6 py-2 shadow-md">
-              Create
+            <Button
+              type="submit"
+              className="rounded-lg px-6 py-2 shadow-md"
+              disabled={saving}
+            >
+              {saving ? "Saving..." : isEdit ? "Update" : "Create"}
             </Button>
             <Button
               type="button"
               variant="outline"
               className="rounded-lg border-gray-300 px-6 py-2 shadow-sm hover:bg-gray-50"
-              onClick={() => router.push("/dashboard/org")}
+              onClick={() => router.push("/org")}
             >
               Back
             </Button>
@@ -237,3 +307,4 @@ export default function NewOrg() {
     </div>
   );
 }
+

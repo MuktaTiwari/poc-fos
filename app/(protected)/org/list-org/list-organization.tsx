@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "axios"; // Import axios
-import { EditIcon, MoreHorizontal, Trash2 } from "lucide-react"; // Import MoreHorizontal
+import axios from "axios";
+import { MoreHorizontal } from "lucide-react";
 
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -15,14 +15,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-// Import DropdownMenu components
-
+// import Demo from "./demo";
 import { columns, data } from "./column";
-import { DeleteOrganizationDialog } from "./deleteOrganizationDialog"; // Import DeleteOrganizationDialog
+import { DeleteOrganizationDialog } from "../delete/deleteOrganizationDialog";
+// import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
 
-// import { DataTable } from '../../ui/data-table'; // Adjust the import path as necessary
-
-export default function OrganizationPage() {
+export default function ListOrganization() {
   const router = useRouter();
   const [organizations, setOrganizations] = useState<data[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +29,7 @@ export default function OrganizationPage() {
   const fetchOrganizations = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`
       );
       const result = response.data;
       const fetchedOrganizations: data[] = result.data.map((org: any) => ({
@@ -54,15 +52,14 @@ export default function OrganizationPage() {
     fetchOrganizations();
   }, []);
 
-  // Modify columns to include the onSuccess callback
-  const columnsWithDelete = columns.map((col) => {
+  const columnsWithActions = columns.map((col) => {
     if (col.id === "actions") {
       return {
         ...col,
         cell: ({ row }) => (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center justify-center rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">
+              <button className="flex items-center justify-center rounded p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800">
                 <MoreHorizontal className="h-5 w-5" />
                 <span className="sr-only">Open menu</span>
               </button>
@@ -70,9 +67,7 @@ export default function OrganizationPage() {
             <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
               <DropdownMenuItem
                 className="px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                onClick={() =>
-                  router.push(`/dashboard/org/update/${row.original.id}`)
-                }
+                onClick={() => router.push(`/org/edit/${row.original.id}`)}
               >
                 Edit
               </DropdownMenuItem>
@@ -97,6 +92,11 @@ export default function OrganizationPage() {
 
   return (
     <div className="container mx-auto py-10">
+      {/* Optional Demo Section */}
+      <div className="mb-8">
+        {/* <Demo /> */}
+      </div>
+
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
           heading="Organization List"
@@ -104,23 +104,22 @@ export default function OrganizationPage() {
         />
         <div className="flex items-center space-x-2">
           <Link
-            href="/dashboard/org/new"
+            href="/org/create"
             className="rounded bg-gray-800 px-6 py-2 text-sm text-white hover:bg-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"
           >
             Add
           </Link>
         </div>
       </div>
+
       {loading ? (
-        <div className="text-center dark:text-white">
-          Loading organizations...
-        </div>
+        <div className="text-center dark:text-white">Loading organizations...</div>
       ) : (
         <>
           {error && (
             <div className="mb-4 text-center text-red-500">Error: {error}</div>
           )}
-          <DataTable columns={columnsWithDelete} data={organizations} />
+          <DataTable columns={columnsWithActions} data={organizations} />
         </>
       )}
     </div>

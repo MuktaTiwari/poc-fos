@@ -16,8 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
-
 export type data = {
   id: string;
   name: string;

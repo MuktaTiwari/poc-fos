@@ -25,7 +25,7 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/dashboard/org",
+        href: "/org",
         icon: "squareStack",
         title: "ORG",
         authorizeOnly: UserRole.ADMIN,

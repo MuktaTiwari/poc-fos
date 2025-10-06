@@ -28,13 +28,14 @@ export function DeleteOrganizationDialog({
 }: DeleteOrganizationDialogProps) {
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/business/${organizationId}`);
+      const baseurl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      await axios.delete(`${baseurl}/business/${organizationId}`);
       toast.success(
-        "Organization and all related data have been deleted successfully ✅",
+        "Organization and all related data have been deleted successfully",
       );
       onSuccess();
     } catch (error) {
-      toast.error("Failed to delete the organization ❌");
+      toast.error("Failed to delete the organization ");
       console.error("Error deleting organization:", error);
     }
   };
