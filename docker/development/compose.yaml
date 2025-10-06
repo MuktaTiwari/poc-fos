@@ -5,4 +5,4 @@ services:
       dockerfile: docker/development/Dockerfile
     image: poc-fos-development
     ports:
-      - "3001:80"
+      - "${HOST_PORT:-3001}:80"
