@@ -20,7 +20,7 @@ export default function SerpAddPage() {
 
   const handleAdd = async (data: any) => {
     await axios.post("http://localhost:3000/business", data);
-    router.push("/serp");
+    router.push("/serp/list");
   };
 
   return (

@@ -28,12 +28,12 @@ export default function SerpList() {
   };
 
   const handleEdit = (row: SerpData) => {
-    router.push(`/edit/${encodeURIComponent(row.id)}`);
+    router.push(`/serp/edit/${encodeURIComponent(row.id)}`);
   };
 
   const handleDelete = (row: SerpData) => {
     // Navigate to delete page with item details
-    router.push(`/delete/${row.id}`);
+    router.push(`/serp/delete/${row.id}`);
   };
 
   const columns = getColumns(handleEdit, handleDelete);
@@ -47,7 +47,7 @@ export default function SerpList() {
         />
 
         <Button
-          onClick={() => router.push("/create")}
+          onClick={() => router.push("/serp/create")}
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors duration-300 hover:bg-primary/90"
         >
           Add SERP

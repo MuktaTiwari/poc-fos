@@ -37,7 +37,7 @@ export default function SerpEditPage() {
 
   const handleEdit = async (data: any) => {
     await axios.patch(`http://localhost:3000/business/${id}`, data);
-    router.push("/serp");
+    router.push("/serp/list");
   };
 
   if (!initialData) return <p>Loading...</p>;

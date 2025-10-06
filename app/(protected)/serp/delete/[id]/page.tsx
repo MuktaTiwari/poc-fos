@@ -52,7 +52,7 @@ export default function SerpDeletePage() {
     setIsLoading(true);
     try {
       await axios.delete(`http://localhost:3000/business/${id}`);
-      router.push("/serp");
+      router.push("/serp/list");
     } catch (error) {
       console.error("Error deleting SERP item:", error);
       setIsLoading(false);
@@ -60,7 +60,7 @@ export default function SerpDeletePage() {
   };
 
   const handleCancel = () => {
-    router.push("/serp");
+    router.push("/serp/list");
   };
 
   return (
