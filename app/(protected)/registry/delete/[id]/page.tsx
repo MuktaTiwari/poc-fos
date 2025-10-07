@@ -31,7 +31,7 @@ export default function DeleteRegistryPage() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${env.NEXT_PUBLIC_APP_URL}/business/${id}s`)
+      await axios.delete(`${env.NEXT_PUBLIC_APP_URL}/business/${id}`)
       toast.success("registry deleted successfully")
       router.push("/registry")
     } catch (error) {
