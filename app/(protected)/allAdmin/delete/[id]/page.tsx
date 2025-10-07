@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -18,24 +18,24 @@ import {
 export default function DeleteAdminPopup() {
   const router = useRouter();
   const { id } = useParams();
-  const [admin, setAdmin] = useState<{ adminName: string } | null>(null);
+  const [admin, setAdmin] = useState<{ name: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
-  useEffect(() => {
-    if (id) {
-      fetchAdminDetails();
-    }
-  }, [id]);
-
-  const fetchAdminDetails = async () => {
+  const fetchAdminDetails = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3002/business/${id}`);
       setAdmin(response.data);
     } catch (error) {
       console.error("Error fetching admin details:", error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchAdminDetails();
+    }
+  }, [id, fetchAdminDetails]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -51,7 +51,7 @@ export default function DeleteAdminPopup() {
   };
 
   const handleCancel = () => {
-   router.push("/allAdmin");
+    router.push("/allAdmin");
   };
 
   return (
@@ -59,7 +59,7 @@ export default function DeleteAdminPopup() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete "{admin?.adminName || `Admin ${id}`}"?
+            Delete &quot;{admin?.name || `Admin ${id}`}&quot;?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete the admin
@@ -74,7 +74,7 @@ export default function DeleteAdminPopup() {
           <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center justify-center">
-                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                <div className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                 Deleting...
               </div>
             ) : (

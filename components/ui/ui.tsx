@@ -16,7 +16,7 @@ export const Input: React.FC<{
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({ icon, placeholder, value, onChange }) => (
   <div className="relative">
-    <div className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400">
+    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
       {icon}
     </div>
     <input
@@ -24,7 +24,7 @@ export const Input: React.FC<{
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="flex h-10 w-full rounded-md border border-gray-200 bg-white py-2 pl-10 pr-3 text-sm ring-offset-background placeholder:text-gray-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-10 w-full rounded-md border border-gray-200 bg-white py-2 pl-10 pr-3 text-sm ring-offset-background transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
     />
   </div>
 );
@@ -51,7 +51,7 @@ export const SelectComponent: React.FC<{
       >
         <span className="truncate">{value}</span>
         <ChevronDown
-          className={`ml-2 h-4 w-4 opacity-50 transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}
+          className={`ml-2 size-4 opacity-50 transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}
         />
       </div>
 

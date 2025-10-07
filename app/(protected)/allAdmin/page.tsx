@@ -9,6 +9,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 
 import { getColumns, AllAdminData } from "./columns";
 import { DataTable } from "./data-table";
+import FilterBar from "./filters/filter";
 
 export default function AllAdminList() {
   const [data, setData] = useState<AllAdminData[]>([]);
@@ -41,19 +42,14 @@ export default function AllAdminList() {
   };
 
   const handleView = (row: AllAdminData) => {
-    router.push(`/allAdmin/view?id=${row.id}`);
+    router.push(`/allAdmin/view/${row.id}`);
   };
 
   const columns = getColumns(handleView, handleEdit, handleDelete);
 
   return (
     <div className="p-4">
-      <DashboardHeader
-        heading="Admin Management"
-        text="Manage all admin users and their permissions"
-      >
-        <Button>Add New Admin</Button>
-      </DashboardHeader>
+   <FilterBar />
       <DataTable columns={columns} data={data} />
     </div>
   );

@@ -73,15 +73,15 @@ export function DataTable<TData, TVale>({
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
+        {/* <Input
           placeholder="Filter adminName..."
           value={(table.getColumn("adminName")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("adminName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
-        <DropdownMenu>
+        /> */}
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown />
@@ -106,7 +106,7 @@ export function DataTable<TData, TVale>({
                 )
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
@@ -159,7 +159,7 @@ export function DataTable<TData, TVale>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
+        <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>

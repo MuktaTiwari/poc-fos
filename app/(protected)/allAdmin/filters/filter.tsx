@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { FilterState } from './types';
 import { adminTypes, roles, statuses, creators, initialFilterState } from './data';
-import { Card, Input, SelectComponent, OutlineButton, PrimaryButton } from '../../components/ui/ui';
+import { Card, Input, SelectComponent, OutlineButton, PrimaryButton } from '../../../../components/ui/ui';
 import { useRouter } from "next/navigation"; // ✅ correct import
 const FilterBar = () => {
   const [filters, setFilters] = useState<FilterState>(initialFilterState);
@@ -34,12 +34,12 @@ const FilterBar = () => {
   };
 
   const handleCreateAdmin = () => {
-    console.log("Navigating to new route: /admins/create (Simulated new tab/window path)");
-    router.push('/admins/create');
+    console.log("Navigating to new route: /admin/create (Simulated new tab/window path)");
+    router.push('/allAdmin/create');
   };
 
   return (
-    <div className="min-h-screen p-4 font-sans sm:p-8">
+    <div>
       
       <div className="mx-auto mb-6 max-w-7xl">
           <div className="flex items-start justify-between">
@@ -60,7 +60,7 @@ const FilterBar = () => {
 
       <Card>
         <div className="mb-6 flex items-center space-x-2 text-gray-800">
-          <SlidersHorizontal className="h-5 w-5 text-gray-600" />
+          <SlidersHorizontal className="size-5 text-gray-600" />
           <h2 className="text-xl font-semibold">Filters</h2>
         </div>
 
@@ -69,7 +69,7 @@ const FilterBar = () => {
           <div className="lg:col-span-2">
             <label className="mb-2 block text-sm font-medium leading-none text-gray-700">Search</label>
             <Input
-              icon={<Search className="h-4 w-4" />}
+              icon={<Search className="size-4" />}
               placeholder="Name, Email, Phone..."
               value={filters.search}
               onChange={(e) => handleChange('search', e.target.value)}

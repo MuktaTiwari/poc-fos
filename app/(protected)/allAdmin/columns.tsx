@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,16 +13,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export interface AllAdminData {
-  id:string;
-  adminName: string;
+  id: string;
+  name: string;
+  emailId: string;
+  phoneNo?: string;
+  status: string;
   adminType: string;
-  email: string;
-  phone: string;
-  role: string;
-  status: boolean;
-  create_by: string;
-  created_on: Date;
-  lastActivity: Date;
+  assignRole: string;
+  create_by?: string;
+  created_on?: Date;
+  lastActivity?: Date;
 }
 
 export const getColumns = (
@@ -32,83 +31,83 @@ export const getColumns = (
   handleDelete: (row: AllAdminData) => void,
 ): ColumnDef<AllAdminData>[] => [
   {
-    accessorKey: "adminName",
+    accessorKey: "name",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Name
-        <ArrowUpDown className="ml-2 h-5 w-5" />
+        <ArrowUpDown className="ml-2 size-5" />
       </Button>
     ),
     cell: ({ row }) => {
-      const name = row.getValue("adminName") as string;
+      const name = (row.getValue("name") as string) || "";
       const initials = name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase();
+        ? name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+        : "?";
 
       return (
         <div className="flex items-center gap-2">
           <Avatar>
-            {/* You can replace AvatarImage src with admin profile URL if available */}
             <AvatarFallback className="text-blue-600">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <span>{name}</span>
+          <span>{name || "No Name"}</span>
         </div>
       );
     },
   },
   {
-    accessorKey: "adminType",
-    header: "Type",
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "emailId",
     header: "Email",
   },
   {
-    accessorKey: "phone",
+    accessorKey: "phoneNo",
     header: "Phone",
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "adminType",
+    header: "Admin Type",
     cell: ({ row }) => {
-      const role = (row.getValue("role") as string).toLowerCase();
-
-      // Define role colors
-      const roleColors: Record<string, string> = {
-        admin: "bg-blue-100 text-blue-800",
-        "super admin": "bg-purple-100 text-purple-800",
-        manager: "bg-orange-100 text-orange-800",
-        developer: "bg-teal-100 text-teal-800",
-        "system admin": "bg-pink-100 text-pink-800",
-        organization: "bg-yellow-100 text-yellow-800",
-      };
-
-      // Default color if no match
-      const colorClass = roleColors[role] || "bg-gray-100 text-gray-800";
-
+      const type = (row.getValue("adminType") as string) || "N/A";
       return (
-        <span
-          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${colorClass}`}
-        >
-          {row.getValue("role")}
+        <span className="inline-flex rounded-full bg-blue-50 px-2 text-xs font-semibold text-blue-800">
+          {type}
         </span>
       );
     },
   },
+  {
+    accessorKey: "assignRole",
+    header: "Assign Role",
+    cell: ({ row }) => {
+      const role = (row.getValue("assignRole") as string) || "N/A";
+      const color =
+        role.toLowerCase() === "maker"
+          ? "bg-green-100 text-green-800"
+          : "bg-yellow-100 text-yellow-800";
 
+      return (
+        <span
+          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${color}`}
+        >
+          {role}
+        </span>
+      );
+    },
+  },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const isActive = row.getValue("status") as boolean;
+      const status = (row.getValue("status") as string)?.toLowerCase();
+      const isActive = status === "active" || status === "true";
       return (
         <span
           className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
@@ -120,31 +119,16 @@ export const getColumns = (
       );
     },
   },
-  {
-    accessorKey: "create_by",
-    header: "Created By",
-  },
-  {
-    accessorKey: "created_on",
-    header: "Created On",
-    cell: ({ row }) =>
-      new Date(row.getValue("created_on")).toLocaleDateString(),
-  },
-  {
-    accessorKey: "lastActivity",
-    header: "Last Activity",
-    cell: ({ row }) => new Date(row.getValue("lastActivity")).toLocaleString(),
-  },
+ 
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const item = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="size-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal />
             </Button>

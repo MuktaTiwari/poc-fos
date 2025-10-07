@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,26 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AllAdminData } from "../columns";
+import { AllAdminData } from "../../columns";
 
 export default function ViewAdminPopup() {
   const [admin, setAdmin] = useState<AllAdminData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const {id} = useParams();
 
-  useEffect(() => {
-    if (id) {
-      fetchAdmin();
-    } else {
-      setError("No admin ID provided");
-      setIsLoading(false);
-    }
-  }, [id]);
-
-  const fetchAdmin = async () => {
+  const fetchAdmin = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3002/business/${id}`);
       setAdmin(response.data);
@@ -41,7 +31,16 @@ export default function ViewAdminPopup() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchAdmin();
+    } else {
+      setError("No admin ID provided");
+      setIsLoading(false);
+    }
+  }, [id, fetchAdmin]);
 
   const handleClose = () => {
     router.back();
@@ -51,8 +50,8 @@ export default function ViewAdminPopup() {
     return (
       <Dialog open={true} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[500px]">
-          <div className="flex flex-col items-center justify-center p-8 space-y-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="flex flex-col items-center justify-center space-y-4 p-8">
+            <div className="size-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
             <p className="text-sm text-gray-600">Loading admin details...</p>
           </div>
         </DialogContent>
@@ -93,27 +92,23 @@ export default function ViewAdminPopup() {
         {admin ? (
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Name</span>
-              <span className="col-span-3 font-semibold">{admin.adminName}</span>
+              <span className="text-left text-sm font-medium">Name</span>
+              <span className="col-span-3 font-semibold">{admin.name}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Type</span>
-              <span className="col-span-3">{admin.adminType}</span>
+              <span className="text-left text-sm font-medium">Email</span>
+              <span className="col-span-3">{admin.emailId}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Email</span>
-              <span className="col-span-3">{admin.email}</span>
+              <span className="text-left text-sm font-medium">AssignRole</span>
+              <span className="col-span-3">{admin.assignRole}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Phone</span>
-              <span className="col-span-3">{admin.phone}</span>
+              <span className="text-left text-sm font-medium">Phone</span>
+              <span className="col-span-3">{admin.phoneNo}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Role</span>
-              <span className="col-span-3">{admin.role}</span>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Status</span>
+              <span className="text-left text-sm font-medium">Status</span>
               <span className="col-span-3">
                 <span
                   className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
@@ -126,25 +121,9 @@ export default function ViewAdminPopup() {
                 </span>
               </span>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Created By</span>
-              <span className="col-span-3">{admin.create_by}</span>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Created On</span>
-              <span className="col-span-3">
-                {new Date(admin.created_on).toLocaleDateString()}
-              </span>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-left">Last Activity</span>
-              <span className="col-span-3">
-                {new Date(admin.lastActivity).toLocaleString()}
-              </span>
-            </div>
           </div>
         ) : (
-          <div className="text-center py-8">
+          <div className="py-8 text-center">
             <p className="text-gray-500">No admin data found</p>
           </div>
         )}

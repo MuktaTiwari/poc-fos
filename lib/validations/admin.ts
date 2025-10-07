@@ -5,7 +5,7 @@ export const adminSchema = z.object({
   emailId: z.string().min(1, { message: "email Id is required" }),
   adminType: z.string().min(1, { message: "Admin type is required" }),
   assignRole: z.string().min(1, { message: "Assign role is required" }),
-  status: z.boolean().optional().nullable(),
+  status: z.string(),
   phoneNo: z.string().optional().nullable(),
   passwordSetup: z.string().optional().nullable(),
 });
