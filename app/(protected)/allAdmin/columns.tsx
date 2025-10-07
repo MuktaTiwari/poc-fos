@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export interface AllAdminData {
+  id: string; // ADD THIS FIELD
   adminName: string;
   adminType: string;
   email: string;
