@@ -93,27 +93,27 @@ export default function ViewAdminPopup() {
         {admin ? (
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Name:</span>
+              <span className="text-sm font-medium text-left">Name</span>
               <span className="col-span-3 font-semibold">{admin.adminName}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Type:</span>
+              <span className="text-sm font-medium text-left">Type</span>
               <span className="col-span-3">{admin.adminType}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Email:</span>
+              <span className="text-sm font-medium text-left">Email</span>
               <span className="col-span-3">{admin.email}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Phone:</span>
+              <span className="text-sm font-medium text-left">Phone</span>
               <span className="col-span-3">{admin.phone}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Role:</span>
+              <span className="text-sm font-medium text-left">Role</span>
               <span className="col-span-3">{admin.role}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Status:</span>
+              <span className="text-sm font-medium text-left">Status</span>
               <span className="col-span-3">
                 <span
                   className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
@@ -127,17 +127,17 @@ export default function ViewAdminPopup() {
               </span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Created By:</span>
+              <span className="text-sm font-medium text-left">Created By</span>
               <span className="col-span-3">{admin.create_by}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Created On:</span>
+              <span className="text-sm font-medium text-left">Created On</span>
               <span className="col-span-3">
                 {new Date(admin.created_on).toLocaleDateString()}
               </span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <span className="text-sm font-medium text-right">Last Activity:</span>
+              <span className="text-sm font-medium text-left">Last Activity</span>
               <span className="col-span-3">
                 {new Date(admin.lastActivity).toLocaleString()}
               </span>

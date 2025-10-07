@@ -43,8 +43,7 @@ export default function DeleteAdminPopup() {
     setIsLoading(true);
     try {
       await axios.delete(`http://localhost:3002/business/${id}`);
-      router.back();
-      router.refresh();
+      router.push("/allAdmin");
     } catch (error) {
       console.error("Error deleting admin:", error);
       setIsLoading(false);
@@ -52,7 +51,7 @@ export default function DeleteAdminPopup() {
   };
 
   const handleCancel = () => {
-    router.back();
+   router.push("/allAdmin");
   };
 
   return (
