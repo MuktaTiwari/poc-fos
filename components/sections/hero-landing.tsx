@@ -45,7 +45,7 @@ export default function HeroLanding() {
             <Icons.arrowRight className="size-4" />
           </Link>
           <Link
-            href="https://github.com/mickasmt/next-auth-roles-template"
+            href={siteConfig.links.linkedin}
             target="_blank"
             rel="noreferrer"
             className={cn(
@@ -57,9 +57,9 @@ export default function HeroLanding() {
               "px-4 text-[15px]",
             )}
           >
-            <Icons.gitHub className="mr-2 size-4" />
+            <Icons.linkedin className="mr-2 size-4" />
             <p>
-              <span className="hidden sm:inline-block">Star on</span> GitHub
+              <span className="hidden sm:inline-block">Connect on</span> LinkedIn
             </p>
           </Link>
         </div>

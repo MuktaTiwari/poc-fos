@@ -9,8 +9,8 @@ export const siteConfig: SiteConfig = {
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
   links: {
-    twitter: "https://twitter.com/miickasmt",
-    github: "https://github.com/mickasmt/next-auth-roles-template",
+    website: "https://pinnacle.in",
+    linkedin: "https://www.linkedin.com/company/pinnacle-teleservices-pvt-ltd/",
   },
   mailSupport: "support@pinnacle.in",
 };
