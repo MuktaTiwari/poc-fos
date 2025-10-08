@@ -14,7 +14,7 @@ export default function MaxWidthWrapper({
   return (
     <div
       className={cn(
-        "container",
+        "container mx-auto",
         large ? "max-w-screen-2xl" : "max-w-6xl",
         className,
       )}

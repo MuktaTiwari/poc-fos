@@ -5,10 +5,10 @@ import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
-export default async function HeroLanding() {
+export default function HeroLanding() {
   return (
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
-      <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
+      <div className="container mx-auto flex max-w-screen-md flex-col items-center gap-5 text-center">
         <Link
           href="https://pinnacle.in/"
           className={cn(
