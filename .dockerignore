@@ -6,5 +6,6 @@ README.md
 .next
 docker/*
 !docker/nginx.conf
+!docker/nginx-static.conf
 !docker/start.sh
 .git
