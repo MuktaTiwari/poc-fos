@@ -87,4 +87,12 @@ export const sidebarLinks: SidebarNavItem[] = [
       },
     ],
   },
+  {
+    title: "PROFILE",
+    items: [
+      { href: "/auth/myprofile", icon: "user", title: "My Profile" },
+      { href: "/auth/change-password", title: "Change Password",  icon:"lock" },
+      { href: "/auth/two-factor-authentication", title: "Two-Factor Authentication",icon:"shield" },
+    ],
+  },
 ];

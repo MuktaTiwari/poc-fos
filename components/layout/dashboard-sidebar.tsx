@@ -120,57 +120,73 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                     )}
                     {section.items.map((item) => {
                       const Icon = Icons[item.icon || "arrowRight"];
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
+                      const [open, setOpen] = useState(false);
+
                       return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
-                            {isSidebarExpanded ? (
-                              <Link
-                                key={`link-${item.title}`}
-                                href={item.disabled ? "#" : item.href}
+                        <div key={item.title}>
+                          {/* If item has children => collapsible */}
+                          {item.children ? (
+                            <>
+                              <button
+                                onClick={() => setOpen(!open)}
                                 className={cn(
-                                  "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                  path === item.href
-                                    ? "bg-muted"
-                                    : "text-muted-foreground hover:text-accent-foreground",
-                                  item.disabled &&
-                                    "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                                  "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                                  "text-muted-foreground hover:text-accent-foreground",
                                 )}
                               >
                                 <Icon className="size-5" />
                                 {item.title}
-                                {item.badge && (
-                                  <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                    {item.badge}
-                                  </Badge>
-                                )}
-                              </Link>
-                            ) : (
-                              <Tooltip key={`tooltip-${item.title}`}>
-                                <TooltipTrigger asChild>
-                                  <Link
-                                    key={`link-tooltip-${item.title}`}
-                                    href={item.disabled ? "#" : item.href}
-                                    className={cn(
-                                      "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
-                                      path === item.href
-                                        ? "bg-muted"
-                                        : "text-muted-foreground hover:text-accent-foreground",
-                                      item.disabled &&
-                                        "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                    )}
-                                  >
-                                    <span className="flex size-full items-center justify-center">
-                                      <Icon className="size-5" />
-                                    </span>
-                                  </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="right">
-                                  {item.title}
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </Fragment>
-                        )
+                                <span className="ml-auto">
+                                  {open ? "▲" : "▼"}
+                                </span>
+                              </button>
+
+                              {open && (
+                                <div className="ml-6 mt-1 space-y-1">
+                                  {item.children.map((child) => {
+                                    const ChildIcon =
+                                      Icons[child.icon || "arrowRight"];
+                                    return (
+                                      <Link
+                                        key={child.title}
+                                        href={child.href}
+                                        className={cn(
+                                          "flex items-center gap-2 rounded-md p-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground",
+                                          path === child.href ? "bg-muted" : "",
+                                        )}
+                                      >
+                                        <ChildIcon className="size-4" />
+                                        {child.title}
+                                      </Link>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            // Default (no children) links
+                            <Link
+                              href={item.disabled ? "#" : item.href}
+                              className={cn(
+                                "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                                path === item.href
+                                  ? "bg-muted"
+                                  : "text-muted-foreground hover:text-accent-foreground",
+                                item.disabled &&
+                                  "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                              )}
+                            >
+                              <Icon className="size-5" />
+                              {item.title}
+                              {item.badge && (
+                                <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                                  {item.badge}
+                                </Badge>
+                              )}
+                            </Link>
+                          )}
+                        </div>
                       );
                     })}
                   </section>

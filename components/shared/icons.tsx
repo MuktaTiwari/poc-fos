@@ -42,6 +42,8 @@ import {
   Trash2,
   User,
   X,
+  Lock,
+  Shield,
 } from "lucide-react";
 import { Layer } from "recharts";
 
@@ -137,5 +139,7 @@ export const Icons = {
   user: User,
   warning: AlertTriangle,
   album: Album,
+  lock:Lock,
+  shield:Shield,
 };
 

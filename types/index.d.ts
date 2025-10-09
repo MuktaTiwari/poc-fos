@@ -21,6 +21,8 @@ export type NavItem = {
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
+  children?: NavItem[];
+  items?: NavItem[];
 };
 
 export type MainNavItem = NavItem;
