@@ -11,7 +11,7 @@ import { Icons } from "../shared/icons";
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
     <footer className={cn("border-t", className)}>
-      <div className="container grid max-w-6xl grid-cols-2 gap-6 py-14 md:grid-cols-5">
+      <div className="container mx-auto grid max-w-6xl grid-cols-2 gap-6 py-14 md:grid-cols-5">
         {footerLinks.map((section) => (
           <div key={section.title}>
             <span className="text-sm font-medium text-foreground">
@@ -37,48 +37,27 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
       </div>
 
       <div className="border-t py-4">
-        <div className="container flex max-w-6xl items-center justify-between">
-          {/* <span className="text-muted-foreground text-sm">
-            Copyright &copy; 2024. All rights reserved.
-          </span> */}
+        <div className="container mx-auto flex max-w-6xl items-center justify-between">
           <p className="text-left text-sm text-muted-foreground">
-            Built by{" "}
-            <Link
-              href={siteConfig.links.twitter}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              mickasmt
-            </Link>
-            . Hosted on{" "}
-            <Link
-              href="https://vercel.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              Vercel
-            </Link>
-            . Illustrations by{" "}
-            <Link
-              href="https://popsy.co"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              Popsy
-            </Link>
+            &copy; {new Date().getFullYear()} Pinnacle Teleservices Pvt. Ltd. All rights reserved.
           </p>
 
           <div className="flex items-center gap-3">
             <Link
-              href={siteConfig.links.github}
+              href={siteConfig.links.website}
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              <Icons.gitHub className="size-5" />
+              <Icons.website className="size-5" />
+            </Link>
+            <Link
+              href={siteConfig.links.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              <Icons.linkedin className="size-5" />
             </Link>
             <ModeToggle />
           </div>

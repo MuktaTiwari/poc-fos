@@ -105,22 +105,19 @@ sshpass -e scp ${COMPOSE_FILE} "${SERVER_USER}@${SERVER_HOST}:${SERVER_PATH}/com
 echo -e "${GREEN}Step 6: Copying environment file to server${NC}"
 sshpass -e scp ${ENV_FILE} "${SERVER_USER}@${SERVER_HOST}:${SERVER_PATH}/.env"
 
-echo -e "${GREEN}Step 7: Checking if image exists on server${NC}"
-IMAGE_EXISTS=$(sshpass -e ssh -T "${SERVER_USER}@${SERVER_HOST}" << ENDSSH
-docker images --format '{{.Repository}}' 2>/dev/null | grep -q "^${IMAGE_NAME}$" && echo 'yes' || echo 'no'
-ENDSSH
-)
+echo -e "${GREEN}Step 7: Removing old image and loading new one${NC}"
+sshpass -e ssh -T "${SERVER_USER}@${SERVER_HOST}" << ENDSSH
+# Remove old image if exists
+docker rmi ${IMAGE_NAME}:latest 2>/dev/null || true
+docker rmi ${IMAGE_NAME} 2>/dev/null || true
 
-IMAGE_EXISTS=$(echo "$IMAGE_EXISTS" | grep -o -e "yes" -o -e "no" | tail -n 1)
-
-if [ "$IMAGE_EXISTS" = "yes" ]; then
-  echo -e "${YELLOW}Image ${IMAGE_NAME} already exists on server, skipping load${NC}"
-else
-  echo -e "${GREEN}Loading Docker image on server${NC}"
-  sshpass -e ssh -T "${SERVER_USER}@${SERVER_HOST}" << ENDSSH
+# Load new image
+echo "Loading new Docker image..."
 docker load < ${TAR_FILE}
+
+# Clean up dangling images
+docker image prune -f
 ENDSSH
-fi
 
 echo -e "${GREEN}Step 8: Stopping existing containers${NC}"
 sshpass -e ssh -T "${SERVER_USER}@${SERVER_HOST}" << ENDSSH

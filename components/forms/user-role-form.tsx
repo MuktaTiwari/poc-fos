@@ -1,13 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { updateUserRole, type FormData } from "@/actions/update-user-role";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, UserRole } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import * as z from "zod";
 
 import { userRoleSchema } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
@@ -29,16 +26,22 @@ import {
 import { SectionColumns } from "@/components/dashboard/section-columns";
 import { Icons } from "@/components/shared/icons";
 
-interface UserNameFormProps {
-  user: Pick<User, "id" | "role">;
+// Mock UserRole enum - replace with actual type
+enum UserRole {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  GUEST = "GUEST",
 }
 
-export function UserRoleForm({ user }: UserNameFormProps) {
-  const { update } = useSession();
-  const [updated, setUpdated] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const updateUserRoleWithId = updateUserRole.bind(null, user.id);
+interface UserRoleFormProps {
+  user: { id: string; role: string };
+}
 
+type FormData = z.infer<typeof userRoleSchema>;
+
+export function UserRoleForm({ user }: UserRoleFormProps) {
+  const [updated, setUpdated] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const roles = Object.values(UserRole);
   const [role, setRole] = useState(user.role);
 
@@ -49,20 +52,32 @@ export function UserRoleForm({ user }: UserNameFormProps) {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof userRoleSchema>) => {
-    startTransition(async () => {
-      const { status } = await updateUserRoleWithId(data);
+  const onSubmit = async (data: FormData) => {
+    setIsPending(true);
 
-      if (status !== "success") {
-        toast.error("Something went wrong.", {
-          description: "Your role was not updated. Please try again.",
-        });
-      } else {
-        await update();
-        setUpdated(false);
-        toast.success("Your role has been updated.");
+    try {
+      // TODO: Replace with actual API endpoint
+      const response = await fetch(`/api/user/${user.id}/role`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update role');
       }
-    });
+
+      setUpdated(false);
+      toast.success("Your role has been updated.");
+    } catch (error) {
+      toast.error("Something went wrong.", {
+        description: "Your role was not updated. Please try again.",
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -80,11 +95,9 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                 <FormItem className="w-full space-y-0">
                   <FormLabel className="sr-only">Role</FormLabel>
                   <Select
-                    // TODO:(FIX) Option value not update. Use useState for the moment
-                    onValueChange={(value: UserRole) => {
+                    onValueChange={(value: string) => {
                       setUpdated(user.role !== value);
                       setRole(value);
-                      // field.onChange;
                     }}
                     name={field.name}
                     defaultValue={user.role}

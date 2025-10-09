@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { updateUserName, type FormData } from "@/actions/update-user-name";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import * as z from "zod";
 
 import { userNameSchema } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
@@ -16,16 +14,16 @@ import { SectionColumns } from "@/components/dashboard/section-columns";
 import { Icons } from "@/components/shared/icons";
 
 interface UserNameFormProps {
-  user: Pick<User, "id" | "name">;
+  user: { id: string; name: string };
 }
 
-export function UserNameForm({ user }: UserNameFormProps) {
-  const { update } = useSession();
-  const [updated, setUpdated] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const updateUserNameWithId = updateUserName.bind(null, user.id);
+type FormData = z.infer<typeof userNameSchema>;
 
-  const checkUpdate = (value) => {
+export function UserNameForm({ user }: UserNameFormProps) {
+  const [updated, setUpdated] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+
+  const checkUpdate = (value: string) => {
     setUpdated(user.name !== value);
   };
 
@@ -40,20 +38,32 @@ export function UserNameForm({ user }: UserNameFormProps) {
     },
   });
 
-  const onSubmit = handleSubmit((data) => {
-    startTransition(async () => {
-      const { status } = await updateUserNameWithId(data);
+  const onSubmit = handleSubmit(async (data) => {
+    setIsPending(true);
 
-      if (status !== "success") {
-        toast.error("Something went wrong.", {
-          description: "Your name was not updated. Please try again.",
-        });
-      } else {
-        await update();
-        setUpdated(false);
-        toast.success("Your name has been updated.");
+    try {
+      // TODO: Replace with actual API endpoint
+      const response = await fetch(`/api/user/${user.id}/name`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update name');
       }
-    });
+
+      setUpdated(false);
+      toast.success("Your name has been updated.");
+    } catch (error) {
+      toast.error("Something went wrong.", {
+        description: "Your name was not updated. Please try again.",
+      });
+    } finally {
+      setIsPending(false);
+    }
   });
 
   return (

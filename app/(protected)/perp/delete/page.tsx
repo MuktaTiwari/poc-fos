@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
@@ -23,7 +23,7 @@ export interface PerpData {
   isActive: boolean;
 }
 
-export default function PerpDeletePage() {
+function PerpDeleteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -31,12 +31,6 @@ export default function PerpDeletePage() {
   const [item, setItem] = useState<PerpData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-
-  useEffect(() => {
-    if (id) {
-      fetchItemDetails();
-    }
-  }, [id]);
 
   const fetchItemDetails = async () => {
     try {
@@ -47,6 +41,13 @@ export default function PerpDeletePage() {
       console.error("Error fetching item details:", error);
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      fetchItemDetails();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -70,7 +71,7 @@ export default function PerpDeletePage() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete "{item?.name || `Item ${id}`}"?
+            Delete &ldquo;{item?.name || `Item ${id}`}&rdquo;?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. If you delete this PERP, all its child
@@ -95,5 +96,13 @@ export default function PerpDeletePage() {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  );
+}
+
+export default function PerpDeletePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PerpDeleteContent />
+    </Suspense>
   );
 }
