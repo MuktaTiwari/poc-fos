@@ -14,7 +14,7 @@ export default function EditAdmin() {
 
   const fetchAdmin = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:3002/business/${id}`);
+      const response = await axios.get(`http://localhost:3002/users/${id}`);
       setAdminData(response.data);
     } catch (error) {
       console.error("Error fetching admin data:", error);

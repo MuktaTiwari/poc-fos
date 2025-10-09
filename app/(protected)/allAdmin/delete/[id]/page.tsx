@@ -24,7 +24,7 @@ export default function DeleteAdminPopup() {
 
   const fetchAdminDetails = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:3002/business/${id}`);
+      const response = await axios.get(`http://localhost:3002/users/${id}`);
       setAdmin(response.data);
     } catch (error) {
       console.error("Error fetching admin details:", error);
@@ -42,7 +42,7 @@ export default function DeleteAdminPopup() {
 
     setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:3002/business/${id}`);
+      await axios.delete(`http://localhost:3002/users/${id}`);
       router.push("/allAdmin");
     } catch (error) {
       console.error("Error deleting admin:", error);

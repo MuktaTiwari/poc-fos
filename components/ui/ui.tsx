@@ -4,7 +4,7 @@ import React from "react";
 import { ChevronDown } from "lucide-react";
 
 export const Card: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="mx-auto max-w-7xl rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+  <div className="mx-auto rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
     {children}
   </div>
 );
@@ -24,7 +24,7 @@ export const Input: React.FC<{
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="flex h-10 w-full rounded-md border border-gray-200 bg-white py-2 pl-10 pr-3 text-sm ring-offset-background transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-10 w-full rounded-md border border-gray-20 bg-gray-100 py-2 pl-10 pr-3 text-sm ring-offset-background transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 "
     />
   </div>
 );
@@ -36,7 +36,9 @@ export const SelectComponent: React.FC<{
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
-}> = ({ options, value, onChange, isOpen, onToggle, onClose }) => {
+  placeholder?: string; // optional placeholder
+
+}> = ({ options, value, onChange, isOpen, onToggle, onClose, placeholder }) => {
   const handleSelect = (option: string) => {
     onChange(option);
     onClose();
@@ -47,9 +49,9 @@ export const SelectComponent: React.FC<{
       <div
         onClick={onToggle}
         className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-sm text-gray-700 shadow-sm transition-all
-          ${isOpen ? "border-blue-500 ring-2 ring-blue-500/50" : "border-gray-200 bg-white hover:border-gray-300"}`}
+          ${isOpen ? "border-blue-500 ring-2 ring-blue-500/50" : "border-gray-200 bg-gray-100 hover:border-gray-300"}`}
       >
-        <span className="truncate">{value}</span>
+        <span className="truncate">{value || placeholder}</span>
         <ChevronDown
           className={`ml-2 size-4 opacity-50 transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}
         />
@@ -88,7 +90,7 @@ export const OutlineButton: React.FC<{
   return (
     <button
       onClick={onClick}
-      className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
     >
       {children}
     </button>

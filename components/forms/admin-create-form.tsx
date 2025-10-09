@@ -4,7 +4,6 @@ import { useEffect, useState, useTransition } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { User } from "next-auth";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -32,19 +31,19 @@ import {
 } from "@/components/ui/select";
 import { Icons } from "@/components/shared/icons";
 
-interface admin {
-  id?:string;
+interface Admin {
+  id?: string;
   name: string;
-  emailId: string;
-  phoneNo?: string;
+  roles: string;
   status: string;
-  adminType: string;
-  assignRole: string;
+  email: string;
+  phone: string;
+  createdBy: string;
+  createdOn: string;
+  lastActivity: string;
 }
-
 interface AdminCreateFormProps {
-  user?: User;
-  admin?: admin;
+  admin?: Admin;
   router: AppRouterInstance;
 }
 
@@ -62,26 +61,34 @@ export default function AdminCreateForm({
     resolver: zodResolver(adminSchema),
     defaultValues: {
       name: "",
-      emailId: "",
-      phoneNo: "",
+      roles: "",
       status: "",
-      adminType: "",
-      assignRole: "",
+      email: "",
+      phone: "",
+      createdBy: "",
+      createdOn: "",
+      lastActivity: "",
     },
   });
 
-  useEffect(() => {
-    if (isEditMode && admin) {
-      form.reset({
-        name: admin.name,
-        emailId: admin.emailId,
-        phoneNo: admin.phoneNo,
-        status: admin.status,
-        adminType: admin.adminType,
-        assignRole: admin.assignRole,
-      });
-    }
-  }, [isEditMode, admin, form]);
+useEffect(() => {
+  if (isEditMode && admin) {
+    form.reset({
+      name: admin.name || "",
+      email: admin.email || "",
+      phone: admin.phone || "",
+      status: admin.status || "",
+      roles: admin.roles || "",
+      createdBy: admin.createdBy || "",
+      createdOn: admin.createdOn
+        ? new Date(admin.createdOn).toISOString().split("T")[0]
+        : "",
+      lastActivity: admin.lastActivity
+        ? new Date(admin.lastActivity).toISOString().split("T")[0]
+        : "",
+    });
+  }
+}, [isEditMode, admin, form]);
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
@@ -89,14 +96,14 @@ export default function AdminCreateForm({
         if (isEditMode && admin) {
           // ✅ EDIT MODE → use PUT
           const response = await axios.put(
-            `http://localhost:3002/business/${admin.id}`,
+            `http://localhost:3002/users/${admin.id}`,
             data,
           );
           toast.success("Admin updated successfully");
         } else {
           // ✅ CREATE MODE → use POST
           const response = await axios.post(
-            "http://localhost:3002/business",
+            "http://localhost:3002/users",
             data,
           );
           toast.success("Admin created successfully");
@@ -111,146 +118,134 @@ export default function AdminCreateForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name *</Label>
-            <Input id="name" {...form.register("name")} />
-            {form.formState.errors?.name && (
-              <p className="text-sm font-medium text-destructive">
-                {form.formState.errors.name.message}
-              </p>
-            )}
-          </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {/* Name */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name *</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Enter admin name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <div className="space-y-2">
-            <Label htmlFor="emailId">Email Id *</Label>
-            <Input id="emailId" {...form.register("emailId")} />
-            {form.formState.errors?.emailId && (
-              <p className="text-sm font-medium text-destructive">
-                {form.formState.errors.emailId.message}
-              </p>
-            )}
-          </div>
+        {/* Role */}
+        <FormField
+          control={form.control}
+          name="roles"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role *</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="e.g. Finance Admin" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="phoneNo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <div className="flex">
-                  {/* Phone prefix mimic */}
-                  <div className="flex h-10 items-center rounded-l-md border border-r-0 bg-white px-3 text-sm text-gray-500">
-                    <span className="mr-2">🇮🇳</span> +91
-                  </div>
-                  <FormControl>
-                    <Input id="phoneNo" {...form.register("phoneNo")} />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a Status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="mb-4 mt-8 text-lg font-semibold">Role Setup</div>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="adminType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select admin type *</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="financeAdmin">Finance admin</SelectItem>
-                    <SelectItem value="legalAdmin">Legal admin</SelectItem>
-                    <SelectItem value="salesAdmin">Sales admin</SelectItem>
-                    <SelectItem value="channelAdmin">Channel admin</SelectItem>
-                    <SelectItem value="supportAdmin">Support admin</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="assignRole"
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>Assign Role *</FormLabel>
+        {/* Status */}
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status *</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    className="flex space-x-4 pt-2"
-                  >
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="Maker" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Maker</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="Checker" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Checker</FormLabel>
-                    </FormItem>
-                  </RadioGroup>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                <SelectContent>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        {/* Password Setup Section */}
-        <div className="mb-2 mt-8 text-lg font-semibold">Password Setup</div>
-        <div className="rounded-lg bg-gray-50 p-4">
-          <p className="text-sm text-gray-700">
-            New Admin will receive a secure Set Password link via email/phone
-            after creation.
-          </p>
-        </div>
+        {/* Email */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email *</FormLabel>
+              <FormControl>
+                <Input {...field} type="email" placeholder="Enter email" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Phone */}
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone *</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="+91 9876543210" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Created By */}
+        <FormField
+          control={form.control}
+          name="createdBy"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Created By *</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Super Admin" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Created On */}
+        <FormField
+          control={form.control}
+          name="createdOn"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Created On *</FormLabel>
+              <FormControl>
+                <Input {...field} type="date" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Last Activity */}
+        <FormField
+          control={form.control}
+          name="lastActivity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Activity *</FormLabel>
+              <FormControl>
+                <Input {...field} type="date" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="mt-8 flex justify-end gap-4">
           <Button
@@ -262,10 +257,8 @@ export default function AdminCreateForm({
             Back
           </Button>
           <Button type="submit" disabled={isPending}>
-            {isPending && (
-              <Icons.spinner className="mr-2 size-4 animate-spin" />
-            )}
-            {isEditMode ? "Update admin" : "Create admin"}
+            {isPending && <Icons.spinner className="mr-2 size-4 animate-spin" />}
+            {isEditMode ? "Update Admin" : "Create Admin"}
           </Button>
         </div>
       </form>

@@ -71,7 +71,7 @@ function PerpDeleteContent() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete &ldquo;{item?.name || Item ${id}}&rdquo;?
+            Delete &ldquo;{item?.name || `Item ${id}`}&rdquo;?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. If you delete this PERP, all its child
