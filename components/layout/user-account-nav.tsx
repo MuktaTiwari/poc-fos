@@ -68,6 +68,17 @@ export function UserAccountNav() {
 
               <li className="rounded-lg text-foreground hover:bg-muted">
                 <Link
+                  href="/auth/myprofile"
+                  onClick={closeDrawer}
+                  className="flex w-full items-center gap-3 px-2.5 py-2"
+                >
+                  <User className="size-4" />
+                  <p className="text-sm">My Profile</p>
+                </Link>
+              </li>
+
+              <li className="rounded-lg text-foreground hover:bg-muted">
+                <Link
                   href="/dashboard/settings"
                   onClick={closeDrawer}
                   className="flex w-full items-center gap-3 px-2.5 py-2"
@@ -104,6 +115,13 @@ export function UserAccountNav() {
           <Link href="/dashboard" className="flex items-center space-x-2.5">
             <LayoutDashboard className="size-4" />
             <p className="text-sm">Dashboard</p>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/auth/myprofile" className="flex items-center space-x-2.5">
+            <User className="size-4" />
+            <p className="text-sm">My Profile</p>
           </Link>
         </DropdownMenuItem>
 
