@@ -79,7 +79,7 @@ export default function ListOrganization() {
                   organizationName={row.original.name}
                   onSuccess={fetchOrganizations}
                 >
-                  <button className="w-full px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-700">
+                  <button className="w-full px-4 py-2 text-left text-sm font-medium text-black-700 hover:bg-red-100 dark:text-blue-400 dark:hover:bg-blue-700">
                     Delete
                   </button>
                 </DeleteOrganizationDialog>
@@ -105,7 +105,7 @@ export default function ListOrganization() {
         <div className="flex items-center space-x-2">
           <Link
             href="/org/create"
-            className="rounded bg-gray-800 px-6 py-2 text-sm text-white hover:bg-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"
+            className="rounded bg-primary px-6 py-2 text-sm text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-700"
           >
             Add
           </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -13,7 +14,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
 
 interface DeleteOrganizationDialogProps {
   children: React.ReactNode;
@@ -28,23 +28,24 @@ export function DeleteOrganizationDialog({
   organizationName,
   onSuccess,
 }: DeleteOrganizationDialogProps) {
-  const { toast } = useToast();
 
   const handleDelete = async () => {
     try {
       const baseurl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
       await axios.delete(`${baseurl}/business/${organizationId}`);
-      toast({
-        title: `Organization "${organizationName}" deleted`,
-        description: `The organization "${organizationName}" and all related data were removed.`,
-        variant: "destructive",
+
+     
+      toast.error(`Organization "${organizationName}" deleted successfully`, {
+        description: "The organization and all related data have been removed.",
+        duration: 4000,
       });
+
       onSuccess();
     } catch (error) {
-      toast({
-        title: "Failed to delete",
-        description: `Something went wrong while deleting "${organizationName}".`,
-        variant: "destructive",
+     
+      toast.error(`Failed to delete "${organizationName}"`, {
+        description: "Something went wrong while deleting the organization.",
+        duration: 4000,
       });
       console.error("Error deleting organization:", error);
     }
@@ -55,7 +56,7 @@ export function DeleteOrganizationDialog({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="border border-gray-200 bg-white shadow-lg sm:max-w-md">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-lg font-semibold text-red-500">
+          <AlertDialogTitle className="text-lg font-semibold text-primary">
             Delete Organization
           </AlertDialogTitle>
           <AlertDialogDescription className="text-sm text-gray-600">
@@ -69,8 +70,8 @@ export function DeleteOrganizationDialog({
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className="rounded bg-red-100 px-4 py-2 text-red-700 hover:bg-red-200"
             onClick={handleDelete}
+           
           >
             Delete
           </AlertDialogAction>

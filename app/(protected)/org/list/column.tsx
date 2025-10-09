@@ -77,14 +77,14 @@ export const columns: ColumnDef<data>[] = [
     header: "Type",
   },
 
-  {
-    accessorKey: "email",
-    header: "Organization Name",
-    filterFn: (row, id, value) => {
-      const cellValue = row.getValue(id) as string;
-      return cellValue?.toLowerCase().startsWith(value.toLowerCase());
-    },
-  },
+  // {
+  //   accessorKey: "email",
+  //   header: "Organization Name",
+  //   filterFn: (row, id, value) => {
+  //     const cellValue = row.getValue(id) as string;
+  //     return cellValue?.toLowerCase().startsWith(value.toLowerCase());
+  //   },
+  // },
   {
     accessorKey: "isActive",
     header: "Status",
