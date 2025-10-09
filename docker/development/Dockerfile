@@ -11,7 +11,6 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
-COPY prisma ./prisma
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -23,57 +22,25 @@ RUN \
 FROM base AS builder
 WORKDIR /app
 
-# Install OpenSSL for Prisma
-RUN apk add --no-cache openssl
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Use the corresponding env file for each environment
 COPY .env.development.sample .env.production
 RUN npm run build
 
-# 3. Production image with Next.js
-FROM base AS nextjs
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Automatically leverage output traces to reduce image size
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-# 4. Nginx reverse proxy
+# 3. Nginx to serve static files
 FROM nginx:alpine AS runner
 
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy custom nginx config from builder stage
-COPY --from=builder /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx config from builder
+COPY --from=builder /app/docker/nginx-static.conf /etc/nginx/conf.d/default.conf
 
-# Copy startup script from builder stage
-COPY --from=builder /app/docker/start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Copy Next.js app from nextjs stage
-COPY --from=nextjs /app /app
-
-# Install Node.js and OpenSSL in nginx container to run Next.js
-RUN apk add --no-cache nodejs openssl
+# Copy static export from builder
+COPY --from=builder /app/out /usr/share/nginx/html
 
 EXPOSE 80
 
-# Start both Next.js and nginx
-CMD ["/start.sh"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

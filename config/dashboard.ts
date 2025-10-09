@@ -1,5 +1,3 @@
-import { UserRole } from "@prisma/client";
-
 import { SidebarNavItem } from "types";
 
 export const sidebarLinks: SidebarNavItem[] = [
@@ -10,31 +8,28 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/perp",
         icon: "logo",
         title: "PERP",
-        authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/serp",
         icon: "layer2",
         title: "SERP",
-        authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/registry",
         icon: "layer",
         title: "REGISTRY",
-        authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/org",
         icon: "squareStack",
         title: "ORG",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
       {
         href: "/cu",
         icon: "shapes",
         title: "CONSUMER UNIT",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
 
        {
@@ -52,38 +47,37 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/channels/whatsapp",
         icon: "whatsApp",
         title: "WhatsApp",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
       {
         href: "/channels/sms",
         icon: "sms",
         title: "SMS",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
       {
         href: "/channels/rcs",
         icon: "rcs",
         title: "RCS",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
       {
         href: "/channels/voice",
         icon: "voice",
         title: "Voice",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
       {
         href: "/channels/email",
         icon: "email",
         title: "E-mail",
-        authorizeOnly: UserRole.ADMIN,
+        
       },
 
       {
         href: "/dashboard/serpList",
         icon: "logo",
         title: "SERP",
-        authorizeOnly: UserRole.USER,
       },
     ],
   },
@@ -96,7 +90,6 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "#",
         icon: "messages",
         title: "Support",
-        authorizeOnly: UserRole.USER,
         disabled: true,
       },
     ],

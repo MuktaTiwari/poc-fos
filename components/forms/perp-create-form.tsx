@@ -1,15 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { SERPFormData } from "@/lib/type";
-import { serpSchema } from "@/lib/validations/serpValidation";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { perpSchema } from "@/lib/validations/perpValidation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -17,28 +13,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import * as z from "zod";
+import { PERPFormData } from "@/lib/type";
 
-type SerpFormType = z.infer<typeof serpSchema>;
+type PerpFormType = z.infer<typeof perpSchema>;
 
-interface SerpFormProps {
-  initialData?: SERPFormData; // for edit
-  parentOptions: SERPFormData[]; // dropdown
-  onSubmit: (data: SerpFormType) => void;
+interface PerpFormProps {
+  initialData?: PERPFormData; // for edit
+  onSubmit: (data: PerpFormType) => void;
   onCancel?: () => void;
 }
 
-export default function SerpForm({
-  initialData,
-  parentOptions,
-  onSubmit,
-  onCancel,
-}: SerpFormProps) {
-  const form = useForm<SerpFormType>({
-    resolver: zodResolver(serpSchema),
+export default function PerpForm({ initialData, onSubmit, onCancel }: PerpFormProps) {
+  const form = useForm<PerpFormType>({
+    resolver: zodResolver(perpSchema),
     defaultValues: {
       name: initialData?.name || "",
-      type: initialData?.type,
-      parentId: initialData?.immediateParent?.id || "",
+      type: initialData?.type || "PERP", // Default to PERP
       panNo: initialData?.panNo || "",
       tanNo: initialData?.tanNo || "",
       gstNo: initialData?.gstNo || "",
@@ -63,19 +54,15 @@ export default function SerpForm({
       {/* Name */}
       <div>
         <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          {...register("name")}
-          placeholder="Enter the SERP name"
-        />
-        {errors.name && <p className="mt-2 text-sm text-red-500">{errors.name.message}</p>}
+        <Input id="name" {...register("name")} placeholder="Enter the PERP name" />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       </div>
 
       {/* Type */}
       <div>
         <Label htmlFor="type">Type</Label>
         <Select
-          value={watch("type") || ""}
+          value={watch("type") || "PERP"}
           onValueChange={(val: "PERP" | "SERP" | "REGISTRY" | "ORG" | "CU") =>
             setValue("type", val)
           }
@@ -91,27 +78,7 @@ export default function SerpForm({
             <SelectItem value="CU">CU</SelectItem>
           </SelectContent>
         </Select>
-        {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
-      </div>
-
-      {/* Parent */}
-      <div>
-        <Label htmlFor="parentId">Parent</Label>
-        <Select
-          value={watch("parentId") || ""}
-          onValueChange={(val) => setValue("parentId", val)}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Parent" />
-          </SelectTrigger>
-          <SelectContent>
-            {parentOptions.map((p) => (
-              <SelectItem key={p.id} value={p.id?.toString() || ""}>
-                {p.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {errors.type && <p className="text-red-500">{errors.type.message}</p>}
       </div>
 
       {/* PAN, TAN, GST */}
@@ -119,23 +86,14 @@ export default function SerpForm({
         <div>
           <Label htmlFor="panNo">PAN</Label>
           <Input id="panNo" {...register("panNo")} />
-          {errors.panNo && (
-            <p className="text-sm text-red-500">{errors.panNo.message}</p>
-          )}
         </div>
         <div>
           <Label htmlFor="tanNo">TAN</Label>
           <Input id="tanNo" {...register("tanNo")} />
-          {errors.tanNo && (
-            <p className="text-sm text-red-500">{errors.tanNo.message}</p>
-          )}
         </div>
         <div>
           <Label htmlFor="gstNo">GST</Label>
           <Input id="gstNo" {...register("gstNo")} />
-          {errors.gstNo && (
-            <p className="text-sm text-red-500">{errors.gstNo.message}</p>
-          )}
         </div>
       </div>
 
@@ -155,9 +113,7 @@ export default function SerpForm({
         <div>
           <Label htmlFor="pincode">Pin Code</Label>
           <Input id="pincode" {...register("pincode")} />
-          {errors.pincode && (
-            <p className="text-sm text-red-500">{errors.pincode.message}</p>
-          )}
+          {errors.pincode && <p className="text-red-500">{errors.pincode.message}</p>}
         </div>
         <div>
           <Label htmlFor="state">State</Label>
@@ -165,10 +121,7 @@ export default function SerpForm({
         </div>
         <div>
           <Label htmlFor="country">Country</Label>
-          <select
-            {...register("country")}
-            className="w-full rounded-md border p-2"
-          >
+          <select {...register("country")} className="w-full rounded-md border p-2">
             <option value="">Select Country</option>
             <option value="India">India</option>
             <option value="USA">USA</option>
@@ -184,7 +137,7 @@ export default function SerpForm({
           id="isActive"
           {...register("isActive")}
           defaultChecked={initialData?.isActive ?? true}
-          className="size-5"
+          className="h-5 w-5"
         />
         <Label htmlFor="isActive">Active</Label>
       </div>

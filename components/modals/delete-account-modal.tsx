@@ -5,7 +5,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -20,24 +19,26 @@ function DeleteAccountModal({
   showDeleteAccountModal: boolean;
   setShowDeleteAccountModal: Dispatch<SetStateAction<boolean>>;
 }) {
-  const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
 
   async function deleteAccount() {
     setDeleting(true);
-    await fetch(`/api/user`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
+
+    try {
+      // TODO: Replace with actual API endpoint
+      const res = await fetch(`/api/user`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       if (res.status === 200) {
-        // delay to allow for the route change to complete
+        // Delay to allow for the route change to complete
         await new Promise((resolve) =>
           setTimeout(() => {
-            signOut({
-              callbackUrl: `${window.location.origin}/`,
-            });
+            // TODO: Handle sign out or redirect
+            window.location.href = '/';
             resolve(null);
           }, 500),
         );
@@ -46,7 +47,10 @@ function DeleteAccountModal({
         const error = await res.text();
         throw error;
       }
-    });
+    } catch (error) {
+      setDeleting(false);
+      throw error;
+    }
   }
 
   return (
@@ -58,8 +62,8 @@ function DeleteAccountModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b p-4 pt-8 sm:px-16">
         <UserAvatar
           user={{
-            name: session?.user?.name || null,
-            image: session?.user?.image || null,
+            name: "User",
+            image: null,
           }}
         />
         <h3 className="text-lg font-semibold">Delete Account</h3>
@@ -67,8 +71,6 @@ function DeleteAccountModal({
           <b>Warning:</b> This will permanently delete your account and your
           active subscription!
         </p>
-
-        {/* TODO: Use getUserSubscriptionPlan(session.user.id) to display the user's subscription if he have a paid plan */}
       </div>
 
       <form

@@ -3,6 +3,8 @@ services:
     build:
       context: ../../
       dockerfile: docker/staging/Dockerfile
-    image: poc-fos-staging
+    image: poc-fos-staging:latest
+    container_name: poc-fos-staging
     ports:
       - "${HOST_PORT:-3002}:80"
+    restart: unless-stopped

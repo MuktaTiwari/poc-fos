@@ -3,6 +3,8 @@ services:
     build:
       context: ../../
       dockerfile: docker/production/Dockerfile
-    image: poc-fos-production
+    image: poc-fos-production:latest
+    container_name: poc-fos-production
     ports:
       - "${HOST_PORT:-3003}:80"
+    restart: unless-stopped
