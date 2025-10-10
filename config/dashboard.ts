@@ -2,7 +2,7 @@ import { SidebarNavItem } from "types"; // Revert import
 
 export const sidebarLinks: SidebarNavItem[] = [ // Revert type
   {
-    title:"\u00A0 ",  // Invisible title to avoid type errors
+    title: undefined,
     items: [
       {
         href: "/dashboard",
@@ -44,7 +44,7 @@ export const sidebarLinks: SidebarNavItem[] = [ // Revert type
     ],
   },
   {
-    title: "\u00A0", 
+    title: undefined,
     items: [
       {
         href: "#",

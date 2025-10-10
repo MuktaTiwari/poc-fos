@@ -6,6 +6,7 @@ import {
 } from "@/components/layout/dashboard-sidebar";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { UserAccountNav } from "@/components/layout/user-account-nav";
+import { Toaster } from "@/components/ui/toaster";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -38,6 +39,7 @@ export default function Dashboard({ children }: ProtectedLayoutProps) {
           </div>
         </main>
       </div>
+      <Toaster />
     </div>
   );
 }
