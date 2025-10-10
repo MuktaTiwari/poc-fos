@@ -102,7 +102,7 @@ export const sidebarLinks: SidebarNavItem[] = [ // Revert type
         icon: "settings",
         title: "Profile",
         children: [
-          { href: "/auth/my-profile", title: "My Profile", icon:"user" },
+          { href: "/auth/myprofile", title: "My Profile", icon:"user" },
           { href: "/auth/change-password", title: "Change Password" ,icon:"lock"},
           { href: "/auth/two-factor-authentication", title: "Two-Factor Authentication" ,icon:"shield"},
         ],
