@@ -16,7 +16,7 @@ export type SiteConfig = {
 
 export type NavItem = {
   title: string;
-  href: string;
+  href?: string; // Made href optional
   badge?: number;
   disabled?: boolean;
   external?: boolean;
@@ -28,7 +28,7 @@ export type NavItem = {
 export type MainNavItem = NavItem;
 
 export type SidebarNavItem = {
-  title: string;
+  title?: string; // Made title optional
   items: NavItem[];
 };
 

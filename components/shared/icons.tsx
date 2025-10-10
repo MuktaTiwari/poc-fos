@@ -44,6 +44,7 @@ import {
   X,
   Lock,
   Shield,
+  ShieldCheck
 } from "lucide-react";
 import { Layer } from "recharts";
 
@@ -141,5 +142,6 @@ export const Icons = {
   album: Album,
   lock:Lock,
   shield:Shield,
+  ShieldCheck:ShieldCheck
 };
 

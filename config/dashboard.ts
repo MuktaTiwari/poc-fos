@@ -1,6 +1,16 @@
-import { SidebarNavItem } from "types";
+import { SidebarNavItem } from "types"; // Revert import
 
-export const sidebarLinks: SidebarNavItem[] = [
+export const sidebarLinks: SidebarNavItem[] = [ // Revert type
+  {
+    
+    items: [
+      {
+        href: "/dashboard",
+        icon: "logo",
+        title: "Dashboard",
+      }
+    ],
+  },
   {
     title: "BUSINESSES",
     items: [
@@ -33,47 +43,73 @@ export const sidebarLinks: SidebarNavItem[] = [
       },
     ],
   },
+  // {
+  //   title: "CHANNELS",
+  //   items: [
+  //     {
+  //       href: "/channels/whatsapp",
+  //       icon: "whatsApp",
+  //       title: "WhatsApp",
+        
+  //     },
+  //     {
+  //       href: "/channels/sms",
+  //       icon: "sms",
+  //       title: "SMS",
+        
+  //     },
+  //     {
+  //       href: "/channels/rcs",
+  //       icon: "rcs",
+  //       title: "RCS",
+        
+  //     },
+  //     {
+  //       href: "/channels/voice",
+  //       icon: "voice",
+  //       title: "Voice",
+        
+  //     },
+  //     {
+  //       href: "/channels/email",
+  //       icon: "email",
+  //       title: "E-mail",
+        
+  //     },
+
+  //     {
+  //       href: "/dashboard/serpList",
+  //       icon: "logo",
+  //       title: "SERP",
+  //     },
+  //   ],
+  // },
   {
-    title: "CHANNELS",
+    // No title for this SidebarNavItem to remove the "OPTION" header
     items: [
       {
-        href: "/channels/whatsapp",
-        icon: "whatsApp",
-        title: "WhatsApp",
-        
+        href: "#",
+        icon: "user",
+        // Shorter title to fit the space
+        title: "Users & Pe& rmissions", 
+        children: [
+          { href: "/dashboard/user-management/role-type", title: "Role & Permission",icon:"ShieldCheck" },
+          { href: "/dashboard/user-management/all-admins", title: "Users",icon:"user" },
+        ],
       },
       {
-        href: "/channels/sms",
-        icon: "sms",
-        title: "SMS",
-        
-      },
-      {
-        href: "/channels/rcs",
-        icon: "rcs",
-        title: "RCS",
-        
-      },
-      {
-        href: "/channels/voice",
-        icon: "voice",
-        title: "Voice",
-        
-      },
-      {
-        href: "/channels/email",
-        icon: "email",
-        title: "E-mail",
-        
-      },
-
-      {
-        href: "/dashboard/serpList",
-        icon: "logo",
-        title: "SERP",
-      },
+        href: "#",
+        icon: "settings",
+        title: "Profile",
+        children: [
+          { href: "/auth/my-profile", title: "My Profile", icon:"user" },
+          { href: "/auth/change-password", title: "Change Password" ,icon:"lock"},
+          { href: "/auth/two-factor-authentication", title: "Two-Factor Authentication" ,icon:"shield"},
+        ],
+      }
     ],
   },
+
   {
     title: "OPTIONS",
     items: [
@@ -85,14 +121,6 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "Support",
         disabled: true,
       },
-    ],
-  },
-  {
-    title: "PROFILE",
-    items: [
-      { href: "/auth/myprofile", icon: "user", title: "My Profile" },
-      { href: "/auth/change-password", title: "Change Password",  icon:"lock" },
-      { href: "/auth/two-factor-authentication", title: "Two-Factor Authentication",icon:"shield" },
     ],
   },
 ];
