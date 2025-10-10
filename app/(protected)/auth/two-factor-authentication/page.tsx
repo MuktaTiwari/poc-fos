@@ -2,6 +2,7 @@
 
 import { DashboardHeader } from "@/components/dashboard/header";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -32,7 +33,7 @@ export default function TwoFactorAuthPage() {
             <Shield className="h-6 w-6" />
             <span className="text-md">2FA Preferred Channel</span>
           </CardTitle>
-          <CardDescription >
+          <CardDescription>
             Choose your preferred channel for receiving two-factor
             authentication code during login process. The selected preferred
             channel for 2FA validation may not always be used. If unavailable,
@@ -41,12 +42,12 @@ export default function TwoFactorAuthPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <label
+            <Label
               htmlFor="preferred-channel"
               className="text-sm font-medium"
             >
               Select Preferred Channel
-            </label>
+            </Label>
             <Select defaultValue="sms">
               <SelectTrigger id="preferred-channel" className="w-full">
                 <SelectValue placeholder="Select a channel" />

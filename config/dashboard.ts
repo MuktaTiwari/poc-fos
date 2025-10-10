@@ -2,7 +2,7 @@ import { SidebarNavItem } from "types"; // Revert import
 
 export const sidebarLinks: SidebarNavItem[] = [ // Revert type
   {
-    
+    title:"\u00A0 ",  // Invisible title to avoid type errors
     items: [
       {
         href: "/dashboard",
@@ -43,49 +43,8 @@ export const sidebarLinks: SidebarNavItem[] = [ // Revert type
       },
     ],
   },
-  // {
-  //   title: "CHANNELS",
-  //   items: [
-  //     {
-  //       href: "/channels/whatsapp",
-  //       icon: "whatsApp",
-  //       title: "WhatsApp",
-        
-  //     },
-  //     {
-  //       href: "/channels/sms",
-  //       icon: "sms",
-  //       title: "SMS",
-        
-  //     },
-  //     {
-  //       href: "/channels/rcs",
-  //       icon: "rcs",
-  //       title: "RCS",
-        
-  //     },
-  //     {
-  //       href: "/channels/voice",
-  //       icon: "voice",
-  //       title: "Voice",
-        
-  //     },
-  //     {
-  //       href: "/channels/email",
-  //       icon: "email",
-  //       title: "E-mail",
-        
-  //     },
-
-  //     {
-  //       href: "/dashboard/serpList",
-  //       icon: "logo",
-  //       title: "SERP",
-  //     },
-  //   ],
-  // },
   {
-    // No title for this SidebarNavItem to remove the "OPTION" header
+    title: "\u00A0", 
     items: [
       {
         href: "#",
@@ -93,7 +52,7 @@ export const sidebarLinks: SidebarNavItem[] = [ // Revert type
         // Shorter title to fit the space
         title: "Users & Permissions", 
         children: [
-          { href: "/dashboard/user-management/role-type", title: "Role & Permission",icon:"ShieldCheck" },
+          { href: "/dashboard/user-management/role-type", title: "Role & Permission",icon:"shieldcheck" },
           { href: "/dashboard/user-management/all-admins", title: "Users",icon:"user" },
         ],
       },

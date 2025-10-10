@@ -142,6 +142,6 @@ export const Icons = {
   album: Album,
   lock:Lock,
   shield:Shield,
-  ShieldCheck:ShieldCheck
+  shieldcheck:ShieldCheck
 };
 
