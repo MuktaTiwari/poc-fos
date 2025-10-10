@@ -16,17 +16,20 @@ export type SiteConfig = {
 
 export type NavItem = {
   title: string;
-  href: string;
+  href: string; // required
   badge?: number;
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
+  children?: NavItem[];
+  items?: NavItem[];
 };
+
 
 export type MainNavItem = NavItem;
 
 export type SidebarNavItem = {
-  title: string;
+  title?: string; // Made title optional
   items: NavItem[];
 };
 

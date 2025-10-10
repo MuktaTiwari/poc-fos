@@ -10,6 +10,12 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -24,6 +30,84 @@ import { Icons } from "@/components/shared/icons";
 
 interface DashboardSidebarProps {
   links: SidebarNavItem[];
+}
+
+interface SidebarItemProps {
+  item: NavItem;
+  path: string;
+  isSidebarExpanded: boolean;
+}
+
+function SidebarItem({ item, path, isSidebarExpanded }: SidebarItemProps) {
+  const Icon = Icons[item.icon || "arrowRight"];
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div key={item.title}>
+      {/* If item has children => collapsible */}
+      {item.children ? (
+        <>
+          <button
+            onClick={() => setOpen(!open)}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              "text-muted-foreground hover:text-accent-foreground",
+            )}
+          >
+            <Icon className="size-5" />
+            {isSidebarExpanded && item.title}
+            {isSidebarExpanded && <span className="ml-auto">{open ? "▲" : "▼"}</span>}
+          </button>
+
+          {open && (
+            <div className="ml-6 mt-1 space-y-1">
+              {item.children.map((child) => {
+                const ChildIcon = Icons[child.icon || "arrowRight"];
+                return (
+                  child.href && (
+                    <Link
+                      key={child.title}
+                      href={child.href}
+                      className={cn(
+                        "flex items-center gap-2 rounded-md p-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground",
+                        path === child.href ? "bg-muted" : "",
+                      )}
+                    >
+                      <ChildIcon className="size-4" />
+                      {child.title}
+                    </Link>
+                  )
+                );
+              })}
+            </div>
+          )}
+        </>
+      ) : (
+        // Default (no children) links
+        item.href ? (
+          <Link
+            href={item.disabled ? "#" : item.href}
+            className={cn(
+              "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              path === item.href
+                ? "bg-muted"
+                : "text-muted-foreground hover:text-accent-foreground",
+              item.disabled &&
+                "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+            )}
+          >
+            <Icon className="size-5" />
+            {isSidebarExpanded && item.title}
+            {isSidebarExpanded && item.badge && (
+              <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                {item.badge}
+              </Badge>
+            )}
+          </Link>
+        ) : null
+      )}
+    </div>
+  );
 }
 
 export function DashboardSidebar({ links }: DashboardSidebarProps) {
@@ -106,75 +190,24 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               </div>
 
               <nav className="flex flex-1 flex-col gap-8 px-4 pt-4">
-                {links.map((section) => (
-                  <section
-                    key={section.title}
-                    className="flex flex-col gap-0.5"
-                  >
-                    {isSidebarExpanded ? (
-                      <p className="text-xs text-muted-foreground">
-                        {section.title}
-                      </p>
-                    ) : (
-                      <div className="h-4" />
-                    )}
-                    {section.items.map((item) => {
-                      const Icon = Icons[item.icon || "arrowRight"];
-                      return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
-                            {isSidebarExpanded ? (
-                              <Link
-                                key={`link-${item.title}`}
-                                href={item.disabled ? "#" : item.href}
-                                className={cn(
-                                  "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                  path === item.href
-                                    ? "bg-muted"
-                                    : "text-muted-foreground hover:text-accent-foreground",
-                                  item.disabled &&
-                                    "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                )}
-                              >
-                                <Icon className="size-5" />
-                                {item.title}
-                                {item.badge && (
-                                  <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                    {item.badge}
-                                  </Badge>
-                                )}
-                              </Link>
-                            ) : (
-                              <Tooltip key={`tooltip-${item.title}`}>
-                                <TooltipTrigger asChild>
-                                  <Link
-                                    key={`link-tooltip-${item.title}`}
-                                    href={item.disabled ? "#" : item.href}
-                                    className={cn(
-                                      "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
-                                      path === item.href
-                                        ? "bg-muted"
-                                        : "text-muted-foreground hover:text-accent-foreground",
-                                      item.disabled &&
-                                        "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                    )}
-                                  >
-                                    <span className="flex size-full items-center justify-center">
-                                      <Icon className="size-5" />
-                                    </span>
-                                  </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="right">
-                                  {item.title}
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </Fragment>
-                        )
-                      );
-                    })}
-                  </section>
-                ))}
+              {links.map((section) => (
+             <section key={section.title ?? section.items[0].title} className="flex flex-col gap-0.5">
+              {/* Only render the title if it exists */}
+              {isSidebarExpanded && section.title && (
+              <p className="text-xs text-muted-foreground">{section.title}</p>
+               )}
+    
+               {section.items.map((item) => (
+               <SidebarItem
+                key={item.title}
+               item={item}
+               path={path}
+                 isSidebarExpanded={isSidebarExpanded}
+           />
+           ))}
+           </section>
+))}
+
               </nav>
 
               <div className="mt-auto p-4">
@@ -225,15 +258,64 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                     key={section.title}
                     className="flex flex-col gap-0.5"
                   >
-                    <p className="text-xs text-muted-foreground">
-                      {section.title}
-                    </p>
+                    {section.title && (
+                      <p className="text-xs text-muted-foreground">
+                        {section.title}
+                      </p>
+                    )}
 
                     {section.items.map((item) => {
                       const Icon = Icons[item.icon || "arrowRight"];
-                      return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
+                      return item.children ? (
+                        <Accordion
+                          key={`accordion-${item.title}`}
+                          type="single"
+                          collapsible
+                          className="w-full"
+                        >
+                          <AccordionItem value={item.title} className="border-b-0">
+                            <AccordionTrigger className="py-2 text-sm font-medium hover:no-underline">
+                              <div
+                                className={cn(
+                                  "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                                  "text-muted-foreground hover:text-accent-foreground",
+                                )}
+                              >
+                                <Icon className="size-5" />
+                                {item.title}
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="pb-1 pt-0">
+                              <div className="ml-6 mt-1 space-y-1">
+                                {item.children.map((child) => {
+                                  const ChildIcon =
+                                    Icons[child.icon || "arrowRight"];
+                                  return (
+                                    child.href && (
+                                      <Link
+                                        key={child.title}
+                                        onClick={() => {
+                                          if (!child.disabled) setOpen(false);
+                                        }}
+                                        href={child.href}
+                                        className={cn(
+                                          "flex items-center gap-2 rounded-md p-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground",
+                                          path === child.href ? "bg-muted" : "",
+                                        )}
+                                      >
+                                        <ChildIcon className="size-4" />
+                                        {child.title}
+                                      </Link>
+                                    )
+                                  );
+                                })}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      ) : (
+                        <Fragment key={`link-fragment-${item.title}`}>
+                          {item.href ? (
                             <Link
                               key={`link-${item.title}`}
                               onClick={() => {
@@ -257,8 +339,8 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                                 </Badge>
                               )}
                             </Link>
-                          </Fragment>
-                        )
+                          ) : null}
+                        </Fragment>
                       );
                     })}
                   </section>

@@ -75,6 +75,22 @@ export function UserAccountNav() {
                   <User className="size-4" />
                   <p className="text-sm">My Profile</p>
                 </Link>
+                <Link
+                  href="/auth/change-password"
+                  onClick={closeDrawer}
+                  className="flex w-full items-center gap-3 px-2.5 py-2"
+                >
+                  <User className="size-4" />
+                  <p className="text-sm">Change Password</p>
+                </Link>
+                <Link
+                  href="/auth/two-factor-authentication"
+                  onClick={closeDrawer}
+                  className="flex w-full items-center gap-3 px-2.5 py-2"
+                >
+                  <User className="size-4" />
+                  <p className="text-sm">Two Factor Authentication</p>
+                </Link>
               </li>
 
               <li className="rounded-lg text-foreground hover:bg-muted">
@@ -122,6 +138,20 @@ export function UserAccountNav() {
           <Link href="/auth/myprofile" className="flex items-center space-x-2.5">
             <User className="size-4" />
             <p className="text-sm">My Profile</p>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/auth/change-password" className="flex items-center space-x-2.5">
+            <User className="size-4" />
+            <p className="text-sm">Change Password</p>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/auth/two-factor-authentication" className="flex items-center space-x-2.5">
+            <User className="size-4" />
+            <p className="text-sm">Two Factor Authentication</p>
           </Link>
         </DropdownMenuItem>
 

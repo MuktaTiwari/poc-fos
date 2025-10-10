@@ -21,11 +21,12 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               {section.items?.map((link) => (
                 <li key={link.title}>
                   <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    {link.title}
-                  </Link>
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-primary"
+                    >
+                  {link.title}
+                </Link>
+
                 </li>
               ))}
             </ul>
