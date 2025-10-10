@@ -7,6 +7,7 @@ import {
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { UserAccountNav } from "@/components/layout/user-account-nav";
 
+
 interface ProtectedLayoutProps {
   children: React.ReactNode;
 }
