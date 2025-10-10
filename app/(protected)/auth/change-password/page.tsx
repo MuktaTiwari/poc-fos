@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
 
-export const changePasswordSchema = z.object({
+const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, { message: "Current password is required" }),
   newPassword: z
     .string()
