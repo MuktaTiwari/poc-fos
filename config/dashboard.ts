@@ -23,13 +23,11 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/org",
         icon: "squareStack",
         title: "ORG",
-        
       },
       {
         href: "/cu",
         icon: "shapes",
         title: "CONSUMER UNIT",
-        
       },
     ],
   },
@@ -40,33 +38,27 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/channels/whatsapp",
         icon: "whatsApp",
         title: "WhatsApp",
-        
       },
       {
         href: "/channels/sms",
         icon: "sms",
         title: "SMS",
-        
       },
       {
         href: "/channels/rcs",
         icon: "rcs",
         title: "RCS",
-        
       },
       {
         href: "/channels/voice",
         icon: "voice",
         title: "Voice",
-        
       },
       {
         href: "/channels/email",
         icon: "email",
         title: "E-mail",
-        
       },
-
       {
         href: "/dashboard/serpList",
         icon: "logo",
@@ -77,8 +69,21 @@ export const sidebarLinks: SidebarNavItem[] = [
   {
     title: "OPTIONS",
     items: [
-      { href: "/dashboard/settings", icon: "settings", title: "Settings" },
-      { href: "/", icon: "home", title: "Homepage" },
+      { 
+        href: "/dashboard/audit-logs", 
+        icon: "post", // Using the FileText icon which is available as "post"
+        title: "Audit Logs" 
+      },
+      { 
+        href: "/dashboard/settings", 
+        icon: "settings", 
+        title: "Settings" 
+      },
+      { 
+        href: "/", 
+        icon: "home", 
+        title: "Homepage" 
+      },
       {
         href: "#",
         icon: "messages",
