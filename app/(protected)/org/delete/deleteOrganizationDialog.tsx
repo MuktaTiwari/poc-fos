@@ -2,7 +2,6 @@
 
 import axios from "axios";
 import { toast } from "sonner";
-import { requireBackendBase } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
 import {
@@ -33,8 +32,7 @@ export function DeleteOrganizationDialog({
 
   const handleDelete = async () => {
     try {
-      const baseurl = requireBackendBase();
-      await axios.delete(`${baseurl}/business/${organizationId}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business/${organizationId}`);
 
      
       toast.success(`Organization "${organizationName}" deleted successfully`, {

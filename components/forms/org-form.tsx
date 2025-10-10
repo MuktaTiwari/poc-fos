@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { requireBackendBase } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
 import { Button } from "@/components/ui/button";
@@ -83,10 +82,10 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [registries, setRegistries] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const hasFetched = useRef(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -107,21 +106,23 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
   });
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchData = async () => {
       try {
         setLoading(true);
-        const baseUrl = requireBackendBase();
 
         // Fetch registries
         const registriesRes = await axios.get(
-          `${baseUrl}/business?type=REGISTRY`,
+          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=REGISTRY`,
         );
         const allRegistries = registriesRes.data?.data ?? [];
         setRegistries(allRegistries);
 
         // If edit, fetch org details
         if (isEdit && id) {
-          const orgRes = await axios.get(`${baseUrl}/business/${id}`);
+          const orgRes = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business/${id}`);
           const orgData = orgRes.data?.data ?? orgRes.data;
 
           const selectedRegistry = allRegistries.find(
@@ -143,9 +144,12 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
             isActive: Boolean(orgData?.isActive ?? true),
           });
         }
-      } catch (err) {
+      } catch (err: any) {
         logger.error("Error fetching data", { err });
-        setError("Failed to load data");
+        const errorMessage = err.response?.data?.message || err.message || "Failed to load data";
+        toast.error("Error loading form data", {
+          description: errorMessage,
+        });
       } finally {
         setLoading(false);
       }
@@ -157,7 +161,6 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
   const onSubmit = async (values: FormValues) => {
     try {
       setSaving(true);
-      const baseUrl = requireBackendBase();
 
       // Remove blank optional fields
       const payload = Object.fromEntries(
@@ -168,25 +171,24 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
       payload.parentId = values.registry || values.parentId || "";
 
       if (isEdit && id) {
-        await axios.patch(`${baseUrl}/business/${id}`, payload);
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business/${id}`, payload);
         toast.success("Organization updated successfully!");
       } else {
-        await axios.post(`${baseUrl}/business`, payload);
+        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business`, payload);
         toast.success("Organization created successfully!");
       }
 
       router.push("/org");
     } catch (err: any) {
-      if (err.response?.data?.message) {
-        // Show backend validation errors
-        const messages = Array.isArray(err.response.data.message)
-          ? err.response.data.message.join("\n")
-          : err.response.data.message;
-        toast.error(messages);
-      } else {
-        toast.error("Failed to save data");
-      }
       logger.error("Error saving data", { err });
+      const errorMessage = err.response?.data?.message || err.message || "Failed to save organization";
+      const messages = Array.isArray(errorMessage)
+        ? errorMessage.join(", ")
+        : errorMessage;
+
+      toast.error("Failed to save organization", {
+        description: messages,
+      });
     } finally {
       setSaving(false);
     }
@@ -234,12 +236,6 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
       <h1 className="mb-8 text-3xl font-extrabold text-foreground">
         {isEdit ? "Update Organization" : "Add Organization"}
       </h1>
-
-      {error && (
-        <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

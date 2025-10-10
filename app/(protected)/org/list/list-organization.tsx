@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { MoreHorizontal } from "lucide-react";
-import { requireBackendBase } from "@/lib/env";
+import { toast } from "sonner";
 
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -24,13 +24,12 @@ export default function ListOrganization() {
   const router = useRouter();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const hasFetched = useRef(false);
 
   const fetchOrganizations = async () => {
     try {
-      const base = requireBackendBase();
       const response = await axios.get(
-        `${base}/business?type=ORGANIZATION`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`,
       );
       const result = response.data;
       const fetchedOrganizations: Organization[] = result.data.map((org: any) => ({
@@ -43,14 +42,20 @@ export default function ListOrganization() {
       }));
       setOrganizations(fetchedOrganizations);
     } catch (e: any) {
-      setError(e.message);
+      const errorMessage = e.response?.data?.message || e.message || "Failed to fetch organizations";
+      toast.error("Error loading organizations", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchOrganizations();
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchOrganizations();
+    }
   }, []);
 
   const columnsWithActions = columns.map((col) => {
@@ -66,11 +71,13 @@ export default function ListOrganization() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 dark:border-gray-700 dark:bg-gray-800">
-              <DropdownMenuItem
-                className="px-4 py-2 text-sm font-medium text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                onClick={() => router.push(`/org/edit/${row.original.id}`)}
-              >
-                Edit
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/org/edit/${row.original.id}`}
+                  className="px-4 py-2 text-sm font-medium text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                >
+                  Edit
+                </Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
@@ -94,8 +101,6 @@ export default function ListOrganization() {
 
   return (
     <div className="container mx-auto py-10">
-      
-
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
           heading="Organization List"
@@ -116,15 +121,10 @@ export default function ListOrganization() {
           Loading organizations...
         </div>
       ) : (
-        <>
-          {error && (
-            <div className="mb-4 text-center text-red-500">Error: {error}</div>
-          )}
-          <DataTable
-            columns={columnsWithActions}
-            data={organizations}
-          />
-        </>
+        <DataTable
+          columns={columnsWithActions}
+          data={organizations}
+        />
       )}
     </div>
   );

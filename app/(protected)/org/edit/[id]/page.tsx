@@ -1,20 +1,16 @@
-import OrgForm from "@/components/forms/org-form";
+import EditOrgClient from "./edit-org-client";
 
-export async function generateStaticParams(): Promise<{ id: string }[]> {
-  const base = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-  if (!base) return [];
-
-  try {
-    const res = await fetch(`${base}/business?type=ORGANIZATION`);
-    const { data = [] } = await res.json();
-    return data
-      .filter((o: any) => o?.id)
-      .map((o: any) => ({ id: String(o.id) }));
-  } catch {
-    return [];
-  }
+// For static export: generate a placeholder route
+// All dynamic IDs will be handled client-side via this placeholder
+export function generateStaticParams() {
+  return [{ id: "placeholder" }];
 }
 
-export default function EditOrgPage({ params }: { params: { id: string } }) {
-  return <OrgForm isEdit={true} id={params.id} />;
+export default async function EditOrgPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <EditOrgClient id={id} />;
 }
