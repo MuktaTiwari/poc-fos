@@ -8,6 +8,7 @@ import { ModeToggle } from "@/components/layout/mode-toggle";
 import { UserAccountNav } from "@/components/layout/user-account-nav";
 import { Toaster } from "@/components/ui/toaster";
 
+
 interface ProtectedLayoutProps {
   children: React.ReactNode;
 }
