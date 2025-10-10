@@ -1,14 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  EditIcon,
-  EyeIcon,
-  MoreHorizontal,
-  MoreVertical,
-  Trash2Icon,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type data = {
+export type Organization = {
   id: string;
   name: string;
   code?: string; // Made optional
@@ -30,12 +23,12 @@ export type data = {
   registryId?: string | null;
   orgId?: string | null;
   cuId?: string | null;
-  isActive: boolean; // Changed to boolean
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export const columns: ColumnDef<data>[] = [
+export const columns: ColumnDef<Organization>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,7 +36,7 @@ export const columns: ColumnDef<data>[] = [
         type="checkbox"
         checked={table.getIsAllRowsSelected()}
         onChange={table.getToggleAllRowsSelectedHandler()}
-        className="size-4 rounded border-gray-300 dark:border-gray-700"
+        className="size-4 rounded border-border"
       />
     ),
     cell: ({ row }) => (
@@ -51,7 +44,7 @@ export const columns: ColumnDef<data>[] = [
         type="checkbox"
         checked={row.getIsSelected()}
         onChange={row.getToggleSelectedHandler()}
-        className="size-4 rounded border-gray-300 dark:border-gray-700"
+        className="size-4 rounded border-border"
       />
     ),
   },
@@ -77,26 +70,18 @@ export const columns: ColumnDef<data>[] = [
     header: "Type",
   },
 
-  // {
-  //   accessorKey: "email",
-  //   header: "Organization Name",
-  //   filterFn: (row, id, value) => {
-  //     const cellValue = row.getValue(id) as string;
-  //     return cellValue?.toLowerCase().startsWith(value.toLowerCase());
-  //   },
-  // },
   {
     accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => (
       <span
         className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium ${
-          row.getValue("isActive") === "active"
-            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-white"
-            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-white"
+          row.getValue("isActive")
+            ? "bg-primary/10 text-primary"
+            : "bg-destructive/10 text-destructive"
         }`}
       >
-        {row.getValue("isActive")}
+        {row.getValue("isActive") ? "active" : "inactive"}
       </span>
     ),
   },
@@ -111,7 +96,7 @@ export const columns: ColumnDef<data>[] = [
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="rounded p-2 text-gray-600 hover:bg-gray-100">
+          <button className="rounded p-2 text-muted-foreground hover:bg-muted">
             ...
           </button>
         </DropdownMenuTrigger>

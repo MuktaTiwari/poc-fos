@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { MoreHorizontal } from "lucide-react";
+import { requireBackendBase } from "@/lib/env";
 
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -16,26 +17,25 @@ import {
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import { DeleteOrganizationDialog } from "../delete/deleteOrganizationDialog";
-// import Demo from "./demo";
-import { columns, data } from "./column";
-
-// import { DeleteOrganizationDialog } from "./deleteOrganizationDialog";
+import { columns } from "./column";
+import type { Organization } from "./column";
 
 export default function ListOrganization() {
   const router = useRouter();
-  const [organizations, setOrganizations] = useState<data[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchOrganizations = async () => {
     try {
+      const base = requireBackendBase();
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/business?type=ORGANIZATION`,
+        `${base}/business?type=ORGANIZATION`,
       );
       const result = response.data;
-      const fetchedOrganizations: data[] = result.data.map((org: any) => ({
+      const fetchedOrganizations: Organization[] = result.data.map((org: any) => ({
         ...org,
-        isActive: org.isActive ? "active" : "inactive",
+        isActive: Boolean(org.isActive),
         createdAt: new Date(org.createdAt),
         updatedAt: new Date(org.updatedAt),
         code: org.code || "N/A",
@@ -94,8 +94,7 @@ export default function ListOrganization() {
 
   return (
     <div className="container mx-auto py-10">
-      {/* Optional Demo Section */}
-      <div className="mb-8">{/* <Demo /> */}</div>
+      
 
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
@@ -123,11 +122,7 @@ export default function ListOrganization() {
           )}
           <DataTable
             columns={columnsWithActions}
-            data={
-              organizations
-                .map((org) => ({ ...org, email: org.name })) // for search
-               
-            }
+            data={organizations}
           />
         </>
       )}

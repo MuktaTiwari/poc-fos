@@ -7,9 +7,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { requireBackendBase } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Form,
   FormControl,
@@ -51,7 +54,7 @@ const formSchema = z.object({
       (val) => !val || /^[A-Z]{4}[0-9]{5}[A-Z]$/.test(val),
       "TAN number must be in format XXXX99999X (e.g., ABCD12345E)",
     ),
-    
+  
   gstNo: z
     .string()
     .optional()
@@ -107,7 +110,7 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const baseUrl = requireBackendBase();
 
         // Fetch registries
         const registriesRes = await axios.get(
@@ -141,7 +144,7 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
           });
         }
       } catch (err) {
-        console.error("Error fetching data:", err);
+        logger.error("Error fetching data", { err });
         setError("Failed to load data");
       } finally {
         setLoading(false);
@@ -154,7 +157,7 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
   const onSubmit = async (values: FormValues) => {
     try {
       setSaving(true);
-      const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      const baseUrl = requireBackendBase();
 
       // Remove blank optional fields
       const payload = Object.fromEntries(
@@ -183,17 +186,52 @@ export default function OrgForm({ isEdit = false, id }: OrgFormProps) {
       } else {
         toast.error("Failed to save data");
       }
-      console.error("Error saving data:", err);
+      logger.error("Error saving data", { err });
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div>
+        <div className="mb-8">
+          <Skeleton className="h-8 w-64" />
+        </div>
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div className="space-y-2" key={i}>
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-end gap-4">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div>
-      <h1 className="mb-8 text-3xl font-extrabold text-gray-800">
+      <h1 className="mb-8 text-3xl font-extrabold text-foreground">
         {isEdit ? "Update Organization" : "Add Organization"}
       </h1>
 
