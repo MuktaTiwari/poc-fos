@@ -14,6 +14,7 @@ import {
 } from "../../../../components/ui/ui";
 import { FilterState } from "./types";
 import { AllAdminData } from "../columns";
+import { env } from "@/env.mjs";
 
 // ✅ Define initial filter state
 const initialFilterState: FilterState = {
@@ -34,32 +35,33 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, data }) => {
 
   // ✅ State for dropdown data
   const [roles, setRoles] = useState<string[]>([]);
-  const [statuses, setStatuses] = useState<string[]>([]);
+  const [statuses, setStatuses] = useState<string[]>(["Active", "Inactive"]); // <- define statuses here
   const [creators, setCreators] = useState<string[]>([]);
 
   const router = useRouter();
 
-  // ✅ Fetch data from db.json
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/users");
-        const UserData = response.data;
+        const response = await axios.get(`${env.NEXT_PUBLIC_API_URL}/roles`);
+        const data = response.data;
 
-        // ✅ Extract unique values
-        const uniqueRoles = Array.from(new Set(UserData.map((item: any) => item.roles))) as string[];
-        const uniqueStatuses = Array.from(new Set(UserData.map((item: any) => item.status))) as string[];
-        const uniqueCreators = Array.from(new Set(UserData.map((item: any) => item.createdBy))) as string[];
-
-        setRoles(uniqueRoles);
-        setStatuses(uniqueStatuses);
-        setCreators(uniqueCreators);
+        // ✅ Ensure it's an array before mapping
+        if (Array.isArray(data)) {
+          const roleNames = data.map((role: any) => role.name);
+          setRoles(roleNames);
+        } else {
+          console.error("Invalid response format: expected array but got", data);
+          setRoles([]); // prevent crash
+        }
       } catch (error) {
-        console.error("Error fetching business data:", error);
+        console.error("Error fetching the roles", error);
+        setRoles([]); // fallback to empty array
       }
     };
+    fetchRoles();
 
-    fetchUserData();
   }, []);
 
 
@@ -75,19 +77,20 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, data }) => {
 
   const handleChange = useCallback((key: keyof FilterState, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-  }, []);
+  }, [setFilters]);
 
   const handleClear = useCallback(() => {
     setFilters(initialFilterState);
-  }, []);
+  }, [setFilters]);
 
   const handleExport = () => {
     console.log("Exporting current data to CSV (Simulated)");
   };
 
-  const handleCreateAdmin = () => {
-    router.push("/allAdmin/create");
-  };
+ const handleCreateAdmin = () => {
+  console.log("Create Admin clicked"); // ✅ check if function fires
+  router.push("/allAdmin/create");
+};
 
   return (
     <div>

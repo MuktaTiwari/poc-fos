@@ -1,28 +1,6 @@
 {
   "users": [
     {
-      "id": "dd21",
-      "name": "Manimukta Tiwari",
-      "roles": "Finance Admin",
-      "status": "Active",
-      "email": "mukta@gmai.com",
-      "phone": "+918830549755",
-      "createdBy": "Impedit et eos et ",
-      "createdOn": "2025-10-09",
-      "lastActivity": "2025-10-10"
-    },
-    {
-      "id": "aaf6",
-      "name": "MacKensie Fleming",
-      "roles": "Admin",
-      "status": "Active",
-      "email": "kyvypewi@mailinator.com",
-      "phone": "+1 (216) 729-1024",
-      "createdBy": "Quis dolor nostrum v",
-      "createdOn": "2006-11-06",
-      "lastActivity": "2003-08-27"
-    },
-    {
       "id": "b31b",
       "name": "Yasir Moon",
       "roles": "superAdmin",
@@ -32,6 +10,46 @@
       "createdBy": "Officia magna conseq",
       "createdOn": "2011-02-08",
       "lastActivity": "1991-12-01"
+    },
+    {
+      "id": "f52a",
+      "name": "Irma Booth",
+      "roles": "superAdmin",
+      "status": "Active",
+      "email": "jefify@mailinator.com",
+      "phone": "+1 (607) 584-6068",
+      "createdBy": "Modi nostrum est nis",
+      "createdOn": "2022-02-05",
+      "lastActivity": "2000-08-25"
+    },
+    {
+      "id": "7035",
+      "name": "Xanthus Spence",
+      "roles": "HR Admin",
+      "status": "Active",
+      "email": "puhehekogy@mailinator.com",
+      "phone": "+1 (959) 181-5252",
+      "createdBy": "Nesciunt aut ducimu",
+      "createdOn": "2001-06-05",
+      "lastActivity": "1993-09-17"
+    }
+  ],
+  "roles": [
+    {
+      "id": "r1",
+      "name": "Finance Admin"
+    },
+    {
+      "id": "r2",
+      "name": "Admin"
+    },
+    {
+      "id": "r3",
+      "name": "superAdmin"
+    },
+    {
+      "id": "r4",
+      "name": "HR Admin"
     }
   ]
 }

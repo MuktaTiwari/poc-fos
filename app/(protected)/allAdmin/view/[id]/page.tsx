@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { AllAdminData } from "../../columns";
 import { Search, Filter, Edit, Trash2 } from "lucide-react";
+import { env } from "@/env.mjs";
 
 export default function ViewAdminPopup() {
   const [admin, setAdmin] = useState<AllAdminData | null>(null);
@@ -23,7 +24,7 @@ export default function ViewAdminPopup() {
 
   const fetchAdmin = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:3002/users/${id}`);
+      const response = await axios.get(`${env.NEXT_PUBLIC_API_URL}/users/${id}`);
       setAdmin(response.data);
       setError(null);
     } catch (error) {

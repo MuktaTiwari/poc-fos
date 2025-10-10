@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
-import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -15,49 +14,52 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
 
-export default function DeleteAdminPopup() {
+export interface SerpData {
+  id: number;
+  name: string;
+  type: string;
+  isActive: boolean;
+}
+
+export default function SerpDeletePage() {
   const router = useRouter();
   const { id } = useParams();
-  const [admin, setAdmin] = useState<{ name: string } | null>(null);
+  const [item, setItem] = useState<SerpData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
-  const fetchAdminDetails = useCallback(async () => {
-    try {
-      const response = await axios.get(`${env.NEXT_PUBLIC_API_URL}/users/${id}`);
-      setAdmin(response.data);
-    } catch (error: any) {
-      console.error("Error fetching admin details:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch admin details");
+  useEffect(() => {
+    const fetchItemDetails = async () => {
+      try {
+        const response = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business/${id}`);
+        setItem(response.data.data || response.data);
+      } catch (error) {
+        console.error("Error fetching item details:", error);
+      }
+    };
+
+    if (id) {
+      fetchItemDetails();
     }
   }, [id]);
-
-  useEffect(() => {
-    if (id) {
-      fetchAdminDetails();
-    }
-  }, [id, fetchAdminDetails]);
-
   const handleDelete = async () => {
     if (!id) return;
 
     setIsLoading(true);
     try {
-      await axios.delete(`${env.NEXT_PUBLIC_API_URL}/users/${id}`);
-      toast.success("Admin deleted successfully");
-      router.push("/allAdmin");
-    } catch (error: any) {
-      console.error("Error deleting admin:", error);
-      toast.error(error?.response?.data?.message || "Failed to delete admin");
-    } finally {
+      await axios.delete(`${env.NEXT_PUBLIC_APP_URL}/business/${id}`);
+      router.push("/serp/list");
+    } catch (error) {
+      console.error("Error deleting SERP item:", error);
       setIsLoading(false);
     }
   };
 
   const handleCancel = () => {
-    router.push("/allAdmin");
+    router.push("/serp/list");
   };
 
   return (
@@ -65,11 +67,11 @@ export default function DeleteAdminPopup() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete &quot;{admin?.name || `Admin ${id}`}&quot;?
+            Delete &quot;{item?.name || `Item ${id}`}&quot;?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the admin
-            account and remove all associated data.
+            This action cannot be undone. If you delete this SERP, all its child
+            records will also be deleted.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -80,7 +82,7 @@ export default function DeleteAdminPopup() {
           <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center justify-center">
-                <div className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                 Deleting...
               </div>
             ) : (

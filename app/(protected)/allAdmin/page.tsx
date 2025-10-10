@@ -11,6 +11,7 @@ import { getColumns, AllAdminData } from "./columns";
 import { DataTable } from "./data-table";
 import FilterBar from "./filters/filter";
 import { FilterState } from "./filters/types";
+import { env } from "@/env.mjs";
 
 export default function AllAdminList() {
   const [data, setData] = useState<AllAdminData[]>([]);
@@ -28,7 +29,7 @@ export default function AllAdminList() {
 
   const fetchAllAdmins = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/users");
+      const response = await axios.get(`${env.NEXT_PUBLIC_API_URL}/users`);
       // Ensure each item has an id
       const dataWithIds = response.data.map((item: any, index: number) => ({
         ...item,

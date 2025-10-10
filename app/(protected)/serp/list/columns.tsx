@@ -57,7 +57,7 @@ export const getColumns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          <ArrowUpDown className="ml-2 size-5" />
+          <ArrowUpDown className="ml-2 h-5 w-5" />
         </Button>
       );
     },
@@ -97,7 +97,7 @@ export const getColumns = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="size-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal />
             </Button>

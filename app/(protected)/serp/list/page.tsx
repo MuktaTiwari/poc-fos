@@ -9,6 +9,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import { getColumns, SerpData } from "./columns";
+import { env } from "@/env.mjs";
 
 export default function SerpList() {
   const [data, setData] = useState<SerpData[]>([]);
@@ -20,7 +21,7 @@ export default function SerpList() {
 
   const fetchSerp = async () => {
     try {
-      const serpData = await axios.get("http://localhost:3000/business?type=SERP");
+      const serpData = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business?type=SERP`);
       setData(serpData.data.data);
     } catch (error) {
       console.log("error fetching the serp from the db.json");
