@@ -91,7 +91,7 @@ export const sidebarLinks: SidebarNavItem[] = [ // Revert type
         href: "#",
         icon: "user",
         // Shorter title to fit the space
-        title: "Users & Pe& rmissions", 
+        title: "Users & Permissions", 
         children: [
           { href: "/dashboard/user-management/role-type", title: "Role & Permission",icon:"ShieldCheck" },
           { href: "/dashboard/user-management/all-admins", title: "Users",icon:"user" },
