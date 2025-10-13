@@ -10,37 +10,37 @@ import { DashboardHeader } from "@/components/dashboard/header";
 
 import { getColumns, SerpData } from "./columns";
 import { env } from "@/env.mjs";
+import { toast } from "sonner";
 
 export default function SerpList() {
   const [data, setData] = useState<SerpData[]>([]);
   const router = useRouter();
 
   useEffect(() => {
+    const fetchSerp = async () => {
+      try {
+        const serpData = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business?type=SERP`);
+        setData(serpData.data.data);
+      } catch (error) {
+        toast.error("Failed to Fetch The SERP.");
+      }
+    };
     fetchSerp();
   }, []);
 
-  const fetchSerp = async () => {
-    try {
-      const serpData = await axios.get(`${env.NEXT_PUBLIC_APP_URL}/business?type=SERP`);
-      setData(serpData.data.data);
-    } catch (error) {
-      console.log("error fetching the serp from the db.json");
-    }
-  };
-
   const handleEdit = (row: SerpData) => {
-    router.push(`/serp/edit/${encodeURIComponent(row.id)}`);
+    router.push(`/serp/edit?id=${encodeURIComponent(row.id)}`);
   };
 
   const handleDelete = (row: SerpData) => {
     // Navigate to delete page with item details
-    router.push(`/serp/delete/${row.id}`);
+    router.push(`/serp/delete?id=${row.id}`);
   };
 
   const columns = getColumns(handleEdit, handleDelete);
 
   return (
-    <div className="p-4">
+    <div >
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
           heading="SERP Panel"

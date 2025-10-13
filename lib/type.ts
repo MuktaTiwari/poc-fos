@@ -1,7 +1,7 @@
 export interface SERPFormData {
   id?: string | number;
   name: string;
-  type?: "PERP" | "SERP" | "REGISTRY" | "ORG" | "CU";
+  type?: "SERP";
   parentId?: string;
   panNo?: string;
   tanNo?: string;

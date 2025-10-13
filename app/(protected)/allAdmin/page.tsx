@@ -68,8 +68,7 @@ export default function AllAdminList() {
   const columns = getColumns(handleView, handleEdit, handleDelete);
 
   return (
-    <div className="p-4">
-      {/* Pass filters and setter to FilterBar */}
+    <div>
       <FilterBar filters={filters} setFilters={setFilters} data={data} />
       <DataTable columns={columns} data={filteredData} />
     </div>

@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import SerpForm from "@/components/forms/serp-create-form";
 import { SERPFormData } from "@/lib/type";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { env } from "@/env.mjs";
+import { toast } from "sonner";
+import { cleanPayload } from "@/lib/utils";
 
 export default function SerpEditPage() {
-  const { id } = useParams();
   const router = useRouter();
   const [initialData, setInitialData] = useState<SERPFormData | undefined>();
   const [parentOptions, setParentOptions] = useState<SERPFormData[]>([]);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   useEffect(() => {
     const fetchParent = async () => {
@@ -37,17 +40,23 @@ export default function SerpEditPage() {
   }, [id]);
 
   const handleEdit = async (data: any) => {
-    await axios.patch(`${env.NEXT_PUBLIC_APP_URL}/business/${id}`, data);
-    router.push("/serp/list");
+    const payload = cleanPayload(data);
+    try {
+      await axios.patch(`${env.NEXT_PUBLIC_APP_URL}/business/${id}`, payload);
+      toast.success("SERP updated successfully!");
+      router.push("/serp/list");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update SERP.");
+    }
   };
-
   if (!initialData) return <p>Loading...</p>;
 
   return (
-    <div className="p-4">
+    <div>
       <div className="mb-4 flex items-center justify-between">
         <DashboardHeader
-          heading="Edit New Serp"
+          heading="Edit Existing SERP"
           text="Access only for users with ADMIN role."
         />
       </div>

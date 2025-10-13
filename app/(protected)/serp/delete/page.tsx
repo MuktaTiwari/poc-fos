@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
+import { get } from "http";
 
 export interface SerpData {
   id: number;
@@ -26,10 +27,11 @@ export interface SerpData {
 
 export default function SerpDeletePage() {
   const router = useRouter();
-  const { id } = useParams();
   const [item, setItem] = useState<SerpData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   useEffect(() => {
     const fetchItemDetails = async () => {
